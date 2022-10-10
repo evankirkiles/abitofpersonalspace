@@ -21,8 +21,9 @@ export default function Home() {
             here are <i>us</i>––they define our selves and our interactions with
             the world. yet what happens when we share these entirely personal
             places? is their magic lost, or does it regain power through the
-            eyes of another beholder? enter and see for yourself. and please,
-            take off your shoes.
+            eyes of another beholder? who would even want to share their own
+            personal space? enter and see for yourself. and please, take off
+            your shoes.
           </div>
         </div>
         <div className={s.logo_column}>
@@ -35,6 +36,7 @@ export default function Home() {
               href="https://evankirkiles.com"
               target="_blank"
               rel="noopener noreferrer"
+              className={s.link}
             >
               evan kirkiles
             </a>

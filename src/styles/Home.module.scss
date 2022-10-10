@@ -126,3 +126,11 @@
   margin-bottom: 5px;
   background-color: $background;
 }
+
+.link {
+  transition: all 0.1s ease-in-out;
+  &:hover {
+    letter-spacing: 2px;
+    color: $highlight;
+  }
+}
