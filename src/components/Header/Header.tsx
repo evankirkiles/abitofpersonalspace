@@ -4,6 +4,7 @@
  * created on Mon Oct 10 2022
  * 2022 the nobot space,
  */
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Logo from '../Logo/Logo';
 import s from './Header.module.scss';
@@ -12,9 +13,13 @@ const Header: React.FC = function Header() {
   return (
     <div className={s.container}>
       <div className={s.visible_bar}>
-        <div>{'<- '}about</div>
+        <Link href="/about">
+          <div>{'<- '}about</div>
+        </Link>
         <Logo strokeWidth={5} />
-        <div>credits{' ->'}</div>
+        <Link href="/credits">
+          <div>credits{' ->'}</div>
+        </Link>
       </div>
     </div>
   );

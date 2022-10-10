@@ -9,8 +9,20 @@ import Image from 'next/image';
 import Header from '../components/Header/Header';
 import Logo from '../components/Logo/Logo';
 import s from '../styles/Home.module.scss';
+import { QueryClient, dehydrate } from 'react-query';
+import {
+  listSpaces,
+  ListSpacesQueryVariables,
+  spaceKeys,
+} from '../supabase/api/spaces';
+import getNextPageParam from '../util/getNextPageParam';
+import {
+  listTags,
+  ListTagsQueryVariables,
+  tagsKeys,
+} from '../supabase/api/tags';
 
-export default function Home() {
+const HomePage: React.FC = function Home() {
   return (
     <div className={s.container}>
       <div className={s.header_container}>
@@ -68,4 +80,41 @@ export default function Home() {
       </div>
     </div>
   );
+};
+
+/**
+ * Run the initial spaces and tags query on the server.
+ * @param context
+ * @returns
+ */
+export async function getStaticProps() {
+  const queryClient = new QueryClient();
+  const params: ListSpacesQueryVariables = {
+    search: '',
+    filter: undefined,
+  };
+  const tagParams: ListTagsQueryVariables = {
+    search: '',
+    filter: undefined,
+  };
+  await Promise.all([
+    queryClient.prefetchInfiniteQuery(
+      spaceKeys.list(params),
+      ({ pageParam = null }) => listSpaces(params, pageParam),
+      { getNextPageParam: getNextPageParam(params) }
+    ),
+    queryClient.prefetchInfiniteQuery(
+      tagsKeys.list(tagParams),
+      ({ pageParam = null }) => listTags(tagParams, pageParam),
+      { getNextPageParam: getNextPageParam(tagParams) }
+    ),
+  ]);
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+    revalidate: 10,
+  };
 }
+
+export default HomePage;

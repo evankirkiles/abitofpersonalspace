@@ -8,12 +8,23 @@ import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import '../styles/globals.scss';
 import SEO from '../../next-seo.config';
+import { QueryClientProvider, QueryClient, Hydrate } from 'react-query';
+import { useState } from 'react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps,
+}: AppProps<{ dehydratedState: unknown }>) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <>
       <DefaultSeo {...SEO} />
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient} contextSharing={true}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <Component {...pageProps} />
+        </Hydrate>
+      </QueryClientProvider>
     </>
   );
 }

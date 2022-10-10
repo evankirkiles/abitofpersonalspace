@@ -1,0 +1,16 @@
+/*
+ * About.module.scss
+ * author: evan kirkiles
+ * created on Mon Oct 10 2022
+ * 2022 the nobot space, 
+ */
+@import '../styles/mixins';
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}

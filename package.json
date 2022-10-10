@@ -7,14 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "gen-types": "set -a; source .env.local; set +a; npx openapi-typescript $NEXT_PUBLIC_SUPABASE_URL/rest/v1/?apikey=$NEXT_PUBLIC_SUPABASE_ANON_KEY --output src/supabase/API.ts",
     "prepare": "husky install",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.2.9",
+    "@supabase/auth-helpers-react": "^0.2.3",
+    "@supabase/supabase-js": "^1.35.7",
     "next": "12.3.1",
     "next-seo": "^5.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-query": "^3.39.2",
     "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
@@ -23,13 +28,13 @@
     "@types/react-dom": "18.0.6",
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.1",
-    "sass": "^1.55.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": ">=6",
     "lint-staged": "^13.0.3",
     "next-sitemap": "^3.1.22",
     "prettier": "^2.7.1",
+    "sass": "^1.55.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.7.4"
   },
