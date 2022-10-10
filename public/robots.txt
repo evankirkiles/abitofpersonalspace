@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://abitofpersonal.space
+
+# Sitemaps
+Sitemap: https://abitofpersonal.space/sitemap.xml
