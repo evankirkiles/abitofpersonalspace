@@ -22,6 +22,7 @@ import {
   tagsKeys,
 } from '../supabase/api/tags';
 import { useInfiniteQuery } from 'react-query';
+import Link from 'next/link';
 
 const HomePage: React.FC = function Home() {
   // get the tags query to show in the filter bar
@@ -47,8 +48,10 @@ const HomePage: React.FC = function Home() {
             the world. yet what happens when we share these entirely personal
             places? is their magic lost, or does it regain power through the
             eyes of another beholder? who would even want to share their own
-            personal space? enter and see for yourself. and please, take off
-            your shoes.
+            personal space? enter and see for yourself. and please,{' '}
+            <Link href="/shoes">
+              <a className={s.shoes}>take off your shoes.</a>
+            </Link>
           </div>
         </div>
         <div className={`${s.logo_column} ${s.subtext}`}>
@@ -76,7 +79,7 @@ const HomePage: React.FC = function Home() {
         {tags.data?.pages
           ? tags.data.pages.flatMap((page) =>
               page.map(({ title, code }) => (
-                <span key={code}>{`>> ${title}`}</span>
+                <span key={code}>{`➾ ${title}`}</span>
               ))
             )
           : null}

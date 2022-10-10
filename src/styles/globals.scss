@@ -5,6 +5,9 @@
   --foreground-2-color: #202020;
   --highlight-color: red;
   --header-height: 40px;
+
+  // --background-color: white;
+  // --foreground-color: black;
 }
 
 html {
@@ -19,7 +22,6 @@ body,
   font-family: 'Schnyder L', Helvetica Neue, -apple-system, BlinkMacSystemFont,
     Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif;
-  font-weight: 100;
   background-color: var(--background-color);
   color: var(--foreground-color);
   min-width: 320px;
