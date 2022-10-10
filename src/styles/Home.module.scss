@@ -1,0 +1,128 @@
+/*
+ * Home.module.scss
+ * author: evan kirkiles
+ * created on Sun Oct 09 2022
+ * 2022 the nobot space, 
+ */
+@import '../styles/mixins';
+
+.container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.filter_bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+  padding: 5px 15px;
+  padding-bottom: 8px;
+  width: 100%;
+  border-top: $border;
+  border-bottom: $border;
+  margin-top: -1px;
+  position: sticky;
+  top: calc($header-height - 1px);
+  background-color: $background;
+  z-index: 1;
+}
+
+.door_grid {
+  flex: 1;
+  display: grid;
+  width: 100%;
+  padding: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.door {
+  width: 100%;
+  border: $border;
+  aspect-ratio: 1/1.5;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+
+  &:hover {
+    transform: scale(0.95);
+  }
+}
+
+.header_container {
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  user-select: auto;
+  background: $background;
+  transition: height 0.3s ease-in-out;
+  // height: 70px;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 30px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+  background-color: $background;
+  z-index: 1;
+
+  & .span {
+    display: inline-block;
+  }
+
+  @include respond-to('xsmall') {
+    font-size: 40px;
+  }
+
+  @include respond-to('small') {
+    white-space: nowrap;
+    font-size: 50px;
+  }
+}
+
+.main_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+
+  @include respond-to('small') {
+    width: min-content;
+  }
+}
+
+.logo_column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.logo {
+  transition: height 0.2s ease-in-out;
+  height: 80px;
+  aspect-ratio: 164 / 101;
+  margin-bottom: 5px;
+  background-color: $background;
+}

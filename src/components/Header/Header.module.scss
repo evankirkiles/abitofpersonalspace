@@ -1,0 +1,40 @@
+/*
+ * Header.module.scss
+ * author: evan kirkiles
+ * created on Mon Oct 10 2022
+ * 2022 the nobot space, 
+ */
+@import '../../styles/mixins';
+
+.container {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  justify-content: flex-end;
+  align-items: flex-start;
+  user-select: auto;
+  background: $background;
+  transition: height 0.3s ease-in-out;
+  height: $header-height;
+  overflow: visible;
+  background-color: $background;
+  z-index: 1;
+}
+
+.visible_bar {
+  height: $header-height;
+  border: $border;
+  border-left: none;
+  border-right: none;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px;
+  gap: 10px;
+}
