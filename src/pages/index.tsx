@@ -26,7 +26,7 @@ export default function Home() {
             your shoes.
           </div>
         </div>
-        <div className={s.logo_column}>
+        <div className={`${s.logo_column} ${s.subtext}`}>
           <div className={s.logo}>
             <Logo />
           </div>
@@ -42,7 +42,7 @@ export default function Home() {
             </a>
             .
           </span>
-          <span>
+          <span className={s.date}>
             <i>winter 2022</i>
           </span>
         </div>
