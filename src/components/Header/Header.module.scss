@@ -49,3 +49,11 @@
   gap: 10px;
   cursor: pointer;
 }
+
+.internal_link {
+  cursor: pointer;
+
+  &:hover {
+    border-bottom: $border;
+  }
+}

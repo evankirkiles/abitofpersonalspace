@@ -23,6 +23,7 @@ import {
 } from '../supabase/api/tags';
 import { useInfiniteQuery } from 'react-query';
 import Link from 'next/link';
+import * as APIt from '../supabase/types';
 
 const HomePage: React.FC = function Home() {
   // get the tags query to show in the filter bar
@@ -35,6 +36,22 @@ const HomePage: React.FC = function Home() {
     ({ pageParam = null }) => listTags(tagParams, pageParam),
     { getNextPageParam: getNextPageParam(tagParams) }
   );
+
+  // list the spaces
+  const spaceParams = {
+    search: '',
+    filter: undefined,
+  };
+  const spacesQuery = useInfiniteQuery<APIt.Space[]>(
+    spaceKeys.list(spaceParams),
+    ({ pageParam = null }) => listSpaces(spaceParams, pageParam),
+    {
+      getNextPageParam: getNextPageParam(spaceParams),
+      keepPreviousData: true,
+    }
+  );
+
+  console.log(spacesQuery.data);
 
   return (
     <div className={s.container}>

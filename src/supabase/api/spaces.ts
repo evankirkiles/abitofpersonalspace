@@ -5,10 +5,7 @@
  * 2022 the nobot space,
  */
 
-import {
-  supabaseClient,
-  supabaseServerClient,
-} from '@supabase/auth-helpers-nextjs';
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import {
   applyNextPageParam,
   InfiniteQueryFilter,
@@ -60,6 +57,25 @@ export const listSpaces = async (
   );
   if (error) throw error;
   return builds;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  MUTATIONS                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Inserts a space into the database
+ * @param input
+ * @returns
+ */
+export const insertSpace = async (
+  input: APIt.SpaceInput | APIt.SpaceInput[]
+) => {
+  const { data: spaces, error } = await supabaseClient
+    .from<APIt.Space>('spaces')
+    .insert(input);
+  if (error) throw error;
+  return spaces;
 };
 
 /* -------------------------------------------------------------------------- */

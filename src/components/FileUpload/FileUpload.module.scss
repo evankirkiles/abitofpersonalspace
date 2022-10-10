@@ -1,0 +1,89 @@
+@import '../../styles/mixins';
+
+.file_input {
+  flex: 1;
+  width: 100%;
+  border: $border;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out,
+    background-position 0.3s ease-in-out;
+  background: linear-gradient(to right, $highlight 50%, white 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  letter-spacing: -1px;
+  white-space: nowrap;
+  min-width: 100px;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+}
+
+.file_input_filled {
+  @extend .file_input;
+  opacity: 1;
+  transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out,
+    background-position 0.5s ease-in-out;
+
+  &::after {
+    position: absolute;
+    width: calc(100% - 6px);
+    height: calc(100% - 6px);
+    top: 3px;
+    left: 3px;
+    content: ' ';
+    border: 1px solid $highlight;
+    border-radius: 5px;
+  }
+  overflow: hidden;
+}
+
+.file_input_real {
+  display: none;
+}
+
+.file_input_real_populated {
+  display: none;
+  pointer-events: none;
+}
+
+.file_icon {
+  border-left: $border;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  pointer-events: all;
+
+  & svg {
+    transform-origin: 50% 50%;
+    transition: transform 0.1s ease-in-out;
+  }
+
+  &:hover svg {
+    transform: scale(1.2);
+  }
+}
+
+.file_title {
+  position: absolute;
+  bottom: 7px;
+  left: 10px;
+  z-index: 1;
+  opacity: 0.5;
+  font-style: italic;
+}

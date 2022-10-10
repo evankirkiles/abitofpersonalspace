@@ -73,6 +73,14 @@ type SpaceFactory = SupabaseEntityFactory<
 export type Space = SpaceFactory['entity'];
 export type SpaceInput = SpaceFactory['input'];
 
+/* ----------------------------- spaces_private ----------------------------- */
+
+type SpacePrivateFactory = SupabaseEntityFactory<
+  APIt.definitions['spaces_private']
+>;
+export type SpacePrivate = SpacePrivateFactory['entity'];
+export type SpacePrivateInput = SpacePrivateFactory['input'];
+
 /* -------------------------------------------------------------------------- */
 /*                                    TAGS                                    */
 /* -------------------------------------------------------------------------- */
@@ -95,5 +103,6 @@ export type Picture = {
 export type S3Object = {
   region: string;
   bucket: string;
+  version: string;
   key: string;
 };

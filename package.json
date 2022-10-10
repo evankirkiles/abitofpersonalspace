@@ -12,20 +12,27 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.186.0",
+    "@next/env": "^12.3.1",
     "@supabase/auth-helpers-nextjs": "^0.2.9",
     "@supabase/auth-helpers-react": "^0.2.3",
     "@supabase/supabase-js": "^1.35.7",
+    "hash-wasm": "^4.9.0",
     "next": "12.3.1",
     "next-seo": "^5.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.4.0",
     "react-query": "^3.39.2",
-    "react-transition-group": "^4.4.5"
+    "react-textarea-autosize": "^8.3.4",
+    "react-transition-group": "^4.4.5",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.2",
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
+    "@types/uuid": "^8.3.4",
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.1",
     "eslint-config-prettier": "^8.5.0",

@@ -5,7 +5,6 @@
  * 2022 the nobot space,
  */
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import Logo from '../Logo/Logo';
 import s from './Header.module.scss';
 
@@ -20,13 +19,13 @@ const Header: React.FC = function Header() {
         </Link>
         <div style={{ flex: 1 }}></div>
         <Link href="/submit">
-          <div>submit</div>
+          <div className={s.internal_link}>submit</div>
         </Link>
         <Link href="/about">
-          <div>about</div>
+          <div className={s.internal_link}>about</div>
         </Link>
         <Link href="/credits">
-          <div>credits</div>
+          <div className={s.internal_link}>credits</div>
         </Link>
       </div>
     </div>

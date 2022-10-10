@@ -12,6 +12,96 @@ export interface paths {
       };
     };
   };
+  '/spaces_private': {
+    get: {
+      parameters: {
+        query: {
+          space_id?: parameters['rowFilter.spaces_private.space_id'];
+          email?: parameters['rowFilter.spaces_private.email'];
+          /** Filtering Columns */
+          select?: parameters['select'];
+          /** Ordering */
+          order?: parameters['order'];
+          /** Limiting and Pagination */
+          offset?: parameters['offset'];
+          /** Limiting and Pagination */
+          limit?: parameters['limit'];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters['range'];
+          /** Limiting and Pagination */
+          'Range-Unit'?: parameters['rangeUnit'];
+          /** Preference */
+          Prefer?: parameters['preferCount'];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions['spaces_private'][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** spaces_private */
+          spaces_private?: definitions['spaces_private'];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters['select'];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters['preferReturn'];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          space_id?: parameters['rowFilter.spaces_private.space_id'];
+          email?: parameters['rowFilter.spaces_private.email'];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters['preferReturn'];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          space_id?: parameters['rowFilter.spaces_private.space_id'];
+          email?: parameters['rowFilter.spaces_private.email'];
+        };
+        body: {
+          /** spaces_private */
+          spaces_private?: definitions['spaces_private'];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters['preferReturn'];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   '/spaces': {
     get: {
       parameters: {
@@ -219,15 +309,138 @@ export interface paths {
       };
     };
   };
+  '/spaces_view': {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters['rowFilter.spaces_view.id'];
+          title?: parameters['rowFilter.spaces_view.title'];
+          description?: parameters['rowFilter.spaces_view.description'];
+          author?: parameters['rowFilter.spaces_view.author'];
+          file_door?: parameters['rowFilter.spaces_view.file_door'];
+          file_space?: parameters['rowFilter.spaces_view.file_space'];
+          created_at?: parameters['rowFilter.spaces_view.created_at'];
+          verified?: parameters['rowFilter.spaces_view.verified'];
+          location?: parameters['rowFilter.spaces_view.location'];
+          /** Filtering Columns */
+          select?: parameters['select'];
+          /** Ordering */
+          order?: parameters['order'];
+          /** Limiting and Pagination */
+          offset?: parameters['offset'];
+          /** Limiting and Pagination */
+          limit?: parameters['limit'];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters['range'];
+          /** Limiting and Pagination */
+          'Range-Unit'?: parameters['rangeUnit'];
+          /** Preference */
+          Prefer?: parameters['preferCount'];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions['spaces_view'][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** spaces_view */
+          spaces_view?: definitions['spaces_view'];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters['select'];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters['preferReturn'];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters['rowFilter.spaces_view.id'];
+          title?: parameters['rowFilter.spaces_view.title'];
+          description?: parameters['rowFilter.spaces_view.description'];
+          author?: parameters['rowFilter.spaces_view.author'];
+          file_door?: parameters['rowFilter.spaces_view.file_door'];
+          file_space?: parameters['rowFilter.spaces_view.file_space'];
+          created_at?: parameters['rowFilter.spaces_view.created_at'];
+          verified?: parameters['rowFilter.spaces_view.verified'];
+          location?: parameters['rowFilter.spaces_view.location'];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters['preferReturn'];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters['rowFilter.spaces_view.id'];
+          title?: parameters['rowFilter.spaces_view.title'];
+          description?: parameters['rowFilter.spaces_view.description'];
+          author?: parameters['rowFilter.spaces_view.author'];
+          file_door?: parameters['rowFilter.spaces_view.file_door'];
+          file_space?: parameters['rowFilter.spaces_view.file_space'];
+          created_at?: parameters['rowFilter.spaces_view.created_at'];
+          verified?: parameters['rowFilter.spaces_view.verified'];
+          location?: parameters['rowFilter.spaces_view.location'];
+        };
+        body: {
+          /** spaces_view */
+          spaces_view?: definitions['spaces_view'];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters['preferReturn'];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
 }
 
 export interface definitions {
+  /** @description Private information about spaces */
+  spaces_private: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    space_id: string;
+    /** Format: text */
+    email: string;
+  };
   /** @description Personal spaces on the site */
   spaces: {
     /**
      * Format: uuid
      * @description Note:
      * This is a Primary Key.<pk/>
+     * @default extensions.uuid_generate_v4()
      */
     id: string;
     /**
@@ -271,6 +484,30 @@ export interface definitions {
      */
     created_at: string;
   };
+  spaces_view: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id?: string;
+    /** Format: text */
+    title?: string;
+    /** Format: text */
+    description?: string;
+    /** Format: text */
+    author?: string;
+    /** Format: jsonb */
+    file_door?: unknown;
+    /** Format: jsonb */
+    file_space?: unknown;
+    /** Format: timestamp with time zone */
+    created_at?: string;
+    /** Format: boolean */
+    verified?: boolean;
+    /** Format: text */
+    location?: string;
+  };
 }
 
 export interface parameters {
@@ -306,6 +543,12 @@ export interface parameters {
   offset: string;
   /** @description Limiting and Pagination */
   limit: string;
+  /** @description spaces_private */
+  'body.spaces_private': definitions['spaces_private'];
+  /** Format: uuid */
+  'rowFilter.spaces_private.space_id': string;
+  /** Format: text */
+  'rowFilter.spaces_private.email': string;
   /** @description spaces */
   'body.spaces': definitions['spaces'];
   /** Format: uuid */
@@ -336,6 +579,26 @@ export interface parameters {
   'rowFilter.tags.code': string;
   /** Format: timestamp with time zone */
   'rowFilter.tags.created_at': string;
+  /** @description spaces_view */
+  'body.spaces_view': definitions['spaces_view'];
+  /** Format: uuid */
+  'rowFilter.spaces_view.id': string;
+  /** Format: text */
+  'rowFilter.spaces_view.title': string;
+  /** Format: text */
+  'rowFilter.spaces_view.description': string;
+  /** Format: text */
+  'rowFilter.spaces_view.author': string;
+  /** Format: jsonb */
+  'rowFilter.spaces_view.file_door': string;
+  /** Format: jsonb */
+  'rowFilter.spaces_view.file_space': string;
+  /** Format: timestamp with time zone */
+  'rowFilter.spaces_view.created_at': string;
+  /** Format: boolean */
+  'rowFilter.spaces_view.verified': string;
+  /** Format: text */
+  'rowFilter.spaces_view.location': string;
 }
 
 export interface operations {}
