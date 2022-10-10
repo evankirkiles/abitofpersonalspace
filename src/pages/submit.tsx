@@ -8,6 +8,7 @@
 import { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
+import Header from '../components/Header/Header';
 import s from '../styles/Submit.module.scss';
 
 const SubmitPage: NextPage = function SubmitPage() {
@@ -20,7 +21,9 @@ const SubmitPage: NextPage = function SubmitPage() {
           description={'submit your own personal space.'}
         />
       </Head>
-      <div className={s.container}></div>
+      <div className={s.container}>
+        <Header />
+      </div>
     </>
   );
 };

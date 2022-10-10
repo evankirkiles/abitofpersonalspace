@@ -39,3 +39,13 @@
   padding: 7px 15px;
   gap: 10px;
 }
+
+.title_and_logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  gap: 10px;
+  cursor: pointer;
+}
