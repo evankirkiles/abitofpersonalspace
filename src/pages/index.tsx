@@ -21,10 +21,23 @@ import {
   ListTagsQueryVariables,
   tagsKeys,
 } from '../supabase/api/tags';
+import { useInfiniteQuery } from 'react-query';
 
 const HomePage: React.FC = function Home() {
+  // get the tags query to show in the filter bar
+  const tagParams = {
+    search: '',
+    filter: undefined,
+  };
+  const tags = useInfiniteQuery(
+    tagsKeys.list(tagParams),
+    ({ pageParam = null }) => listTags(tagParams, pageParam),
+    { getNextPageParam: getNextPageParam(tagParams) }
+  );
+
   return (
     <div className={s.container}>
+      <Header />
       <div className={s.header_container}>
         <div className={s.main_container}>
           <h1 className={s.title}>A&nbsp;BIT&nbsp;OF PERSONAL&nbsp;SPACE</h1>
@@ -59,12 +72,14 @@ const HomePage: React.FC = function Home() {
           </span>
         </div>
       </div>
-      <Header />
       <div className={s.filter_bar}>
-        <span>{'>> studios'}</span>
-        <span>{'>> homes'}</span>
-        <span>{'>> stations'}</span>
-        <span>{'>> dorms'}</span>
+        {tags.data?.pages
+          ? tags.data.pages.flatMap((page) =>
+              page.map(({ title, code }) => (
+                <span key={code}>{`>> ${title}`}</span>
+              ))
+            )
+          : null}
       </div>
       <div className={s.door_grid}>
         <div className={s.door}>peter kirkiles</div>

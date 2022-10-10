@@ -13,12 +13,16 @@ const Header: React.FC = function Header() {
   return (
     <div className={s.container}>
       <div className={s.visible_bar}>
-        <Link href="/about">
-          <div>{'<- '}about</div>
+        <Logo strokeWidth={5} />A Bit of Personal Space.
+        <div style={{ flex: 1 }}></div>
+        <Link href="/submit">
+          <div>submit</div>
         </Link>
-        <Logo strokeWidth={5} />
+        <Link href="/about">
+          <div>about</div>
+        </Link>
         <Link href="/credits">
-          <div>credits{' ->'}</div>
+          <div>credits</div>
         </Link>
       </div>
     </div>

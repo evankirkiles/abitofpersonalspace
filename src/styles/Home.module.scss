@@ -103,6 +103,7 @@
 .subtext {
   font-size: 13px;
   text-align: justify;
+  font-family: Helvetica Neue;
 
   @include respond-to('xsmall') {
     font-size: 16px;

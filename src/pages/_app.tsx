@@ -7,6 +7,7 @@
 import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import '../styles/globals.scss';
+import '../styles/fonts.scss';
 import SEO from '../../next-seo.config';
 import { QueryClientProvider, QueryClient, Hydrate } from 'react-query';
 import { useState } from 'react';
