@@ -42,7 +42,7 @@
   width: 100%;
   padding: 10px;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-template-rows: min-content;
+  grid-auto-rows: min-content;
   gap: 10px;
 
   @include respond-to('small') {
