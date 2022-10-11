@@ -115,6 +115,8 @@ export interface paths {
           file_space?: parameters['rowFilter.spaces.file_space'];
           verified?: parameters['rowFilter.spaces.verified'];
           location?: parameters['rowFilter.spaces.location'];
+          /** Direction which the door image opens */
+          door_handle_on_right?: parameters['rowFilter.spaces.door_handle_on_right'];
           /** Filtering Columns */
           select?: parameters['select'];
           /** Ordering */
@@ -174,6 +176,8 @@ export interface paths {
           file_space?: parameters['rowFilter.spaces.file_space'];
           verified?: parameters['rowFilter.spaces.verified'];
           location?: parameters['rowFilter.spaces.location'];
+          /** Direction which the door image opens */
+          door_handle_on_right?: parameters['rowFilter.spaces.door_handle_on_right'];
         };
         header: {
           /** Preference */
@@ -197,6 +201,8 @@ export interface paths {
           file_space?: parameters['rowFilter.spaces.file_space'];
           verified?: parameters['rowFilter.spaces.verified'];
           location?: parameters['rowFilter.spaces.location'];
+          /** Direction which the door image opens */
+          door_handle_on_right?: parameters['rowFilter.spaces.door_handle_on_right'];
         };
         body: {
           /** spaces */
@@ -465,6 +471,12 @@ export interface definitions {
     verified: boolean;
     /** Format: text */
     location?: string;
+    /**
+     * Format: boolean
+     * @description Direction which the door image opens
+     * @default false
+     */
+    door_handle_on_right: boolean;
   };
   /** @description Tags to be applied to spaces */
   tags: {
@@ -569,6 +581,11 @@ export interface parameters {
   'rowFilter.spaces.verified': string;
   /** Format: text */
   'rowFilter.spaces.location': string;
+  /**
+   * Format: boolean
+   * @description Direction which the door image opens
+   */
+  'rowFilter.spaces.door_handle_on_right': string;
   /** @description tags */
   'body.tags': definitions['tags'];
   /** Format: character varying */

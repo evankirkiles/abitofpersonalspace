@@ -28,17 +28,27 @@
   position: relative;
   z-index: 0;
 
-  &:hover .img_container {
-    transform: perspective(1200px) rotateY(60deg);
-  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .img_container {
+      transform: perspective(1200px) rotateY(60deg);
+    }
 
-  &:hover .shadow_overlay {
-    display: block;
-  }
+    &:hover .shadow_overlay {
+      display: block;
+    }
 
-  &:hover .img_preview {
-    display: block;
-    animation: fadein 0.6s ease-in-out;
+    &:hover .img_preview {
+      display: block;
+      animation: fadein 0.6s ease-in-out;
+    }
+
+    &[class~='open-right'].img_container {
+      transform-origin: right;
+    }
+
+    &[class~='open-right']:hover .img_container {
+      transform: perspective(1200px) rotateY(-60deg);
+    }
   }
 }
 
@@ -94,17 +104,13 @@ $img_padding: 20px;
   width: calc(100% - ($img_padding * 2));
   height: calc(100% - ($img_padding * 2));
   z-index: 1;
-  transform-origin: right;
+  transform-origin: left;
   /*Speed of the Door animation*/
   transition: all 0.3s ease-in-out;
   overflow: visible;
   cursor: pointer;
   backface-visibility: hidden;
   transform: translate3D(0, 0, 0);
-  // &:hover {
-  //   transform: perspective(1200px) translateZ(0px) translateX(0px)
-  //     translateY(0px) rotateY(60deg);
-  // }
 }
 
 $img_padding_inner: 30px;
