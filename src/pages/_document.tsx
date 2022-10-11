@@ -39,12 +39,12 @@ class MyDocument extends Document {
             href="/favicon-16x16.png"
           />
           <link rel="manifest" href="/site.webmanifest" />
-          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ffffff" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
-          <meta name="theme-color" content="#ffffff" />
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
+          <meta name="msapplication-TileColor" content="#000000" />
+          <meta name="theme-color" content="#000000" />
           <meta name="apple-mobile-web-app-title" content="evan kirkiles" />
           <meta name="application-name" content="evan kirkiles" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="msapplication-TileColor" content="#000000" />
         </Head>
         <body>
           <Main />
