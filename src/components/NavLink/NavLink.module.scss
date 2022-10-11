@@ -1,0 +1,40 @@
+@import '../../styles//mixins';
+
+/*
+ * styles.module.css
+ * author: evan kirkiles
+ * created on Tue Jul 19 2022
+ * 2022 the nobot space, 
+ */
+@keyframes fadeinborder {
+  from {
+    border: 1px solid $background;
+    background-color: transparent;
+    color: $foreground;
+  }
+  to {
+    border: 1px solid $foreground;
+    background-color: $foreground;
+    color: $background;
+  }
+}
+
+.nav_link {
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    border-bottom: $border;
+    opacity: 1;
+  }
+
+  &[class~='active'] {
+    opacity: 1;
+    font-weight: 700;
+    background-color: $foreground;
+    color: $background;
+    border: 1px solid $background;
+    animation: fadeinborder 0.3s ease-in-out;
+    padding: 3px 5px;
+  }
+}

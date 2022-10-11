@@ -5,10 +5,14 @@
  * 2022 the nobot space,
  */
 import Link from 'next/link';
+import { useState } from 'react';
 import Logo from '../Logo/Logo';
+import NavLink from '../NavLink/NavLink';
 import s from './Header.module.scss';
+import Hamburger from 'hamburger-react';
 
 const Header: React.FC = function Header() {
+  const [navOpen, setNavOpen] = useState(false);
   return (
     <div className={s.container}>
       <div className={s.visible_bar}>
@@ -18,15 +22,15 @@ const Header: React.FC = function Header() {
           </div>
         </Link>
         <div style={{ flex: 1 }}></div>
-        <Link href="/submit">
-          <div className={s.internal_link}>submit</div>
-        </Link>
-        <Link href="/about">
-          <div className={s.internal_link}>about</div>
-        </Link>
-        <Link href="/credits">
-          <div className={s.internal_link}>credits</div>
-        </Link>
+        <div className={s.links_container}>
+          <NavLink href="/submit">submit</NavLink>
+          <NavLink href="/about">about</NavLink>
+          <NavLink href="/credits">credits</NavLink>
+        </div>
+        <div className={s.menu} onClick={() => setNavOpen(!navOpen)}>
+          <div className={s.menu_text}>{navOpen ? 'CLOSE' : 'MENU'}</div>
+          <Hamburger size={20} toggled={navOpen} toggle={setNavOpen} />
+        </div>
       </div>
     </div>
   );

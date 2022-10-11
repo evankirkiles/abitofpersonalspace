@@ -142,7 +142,6 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 5px;
-  animation: faderight 0.4s ease-in-out;
 
   @include respond-to('small') {
     width: min-content;
@@ -167,9 +166,7 @@
   align-items: center;
   height: 100%;
   text-align: right;
-  animation: fadeleft 0.4s ease-in-out;
-  animation-delay: 0.2s;
-  animation-fill-mode: backwards;
+  // animation: fadeleft 0.4s ease-in-out;
 }
 
 .logo {
