@@ -4,7 +4,7 @@
  * created on Tue Oct 11 2022
  * 2022 the nobot space,
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as APIt from '../../supabase/types';
 import { World } from './game/world/World';
 import s from './Space.module.scss';
@@ -18,6 +18,9 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<World | null>(null);
 
+  // loading state
+  const [isLoading, setIsLoading] = useState(true);
+
   // initialize the world immediately
   useEffect(() => {
     // if there is a world, destroy it
@@ -25,10 +28,21 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
       worldRef.current.destroy();
     }
     // now rebuild it with the better world
-    worldRef.current = new World(canvasRef.current!, world);
+    worldRef.current = new World(canvasRef.current!, world, {
+      onDownloadFinish: () => setIsLoading(false),
+    });
   }, [world]);
 
-  return <div className={s.container} ref={canvasRef} />;
+  return (
+    <div className={s.container} ref={canvasRef}>
+      {isLoading ? (
+        <div className={s.loading_container}>
+          <div>Loading...</div>
+          {/* <div className={s.loading_bar}></div> */}
+        </div>
+      ) : null}
+    </div>
+  );
 };
 
 export default Space;

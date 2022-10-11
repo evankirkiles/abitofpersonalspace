@@ -4,6 +4,7 @@
  * created on Tue Oct 11 2022
  * 2022 the nobot space, 
  */
+@import '../../styles/mixins';
 
 .container {
   width: 100%;
@@ -19,4 +20,26 @@
     height: 100%;
     image-rendering: pixelated;
   }
+}
+
+.loading_container {
+  grid-area: loading;
+  place-self: center center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  z-index: 1;
+}
+
+.loading_bar {
+  width: 200px;
+  height: 20px;
+  border: 1px solid $foreground;
+  background-color: $background;
 }

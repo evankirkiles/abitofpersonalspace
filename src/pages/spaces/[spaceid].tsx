@@ -19,6 +19,7 @@ import getSeasonString from '../../util/getSeasonString';
 import { useEffect, useState } from 'react';
 import { getSignedFileUrl } from '../../util/s3client';
 import Space from '../../components/Space/Space';
+import ScrollLock from 'react-scrolllock';
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPING                                   */
@@ -38,6 +39,7 @@ interface QParams extends ParsedUrlQuery {
 const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
   // use a fallback loading indicator
   const router = useRouter();
+
   // get the cached space query. we will also re-get the papercraft likes
   const { data: space } = useQuery(
     spaceKeys.get(spaceid),
@@ -75,6 +77,7 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
           }}
         />
       </Head>
+      <ScrollLock />
       <div className={s.container}>
         {world ? <Space world={world} /> : null}
         <div className={s.overlay}>
@@ -111,10 +114,6 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
               ) : null}
             </div>
           ) : null}
-          <div className={s.loading_container}>
-            <div>Loading...</div>
-            <div className={s.loading_bar}></div>
-          </div>
           <div className={s.more_info}>+</div>
           <div className={s.instructions}>?</div>
         </div>
