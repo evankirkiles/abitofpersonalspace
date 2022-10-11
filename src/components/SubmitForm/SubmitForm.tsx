@@ -80,6 +80,7 @@ const SubmitForm: React.FC = function () {
           author: author || undefined,
           verified: false,
           location: location || undefined,
+          door_handle_on_right: true,
           file_door: {
             ...file_door_dimensions,
             object: door_object,
