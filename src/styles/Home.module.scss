@@ -79,6 +79,8 @@
   transition: height 0.3s ease-in-out;
   // height: 70px;
   overflow: hidden;
+
+  @include dot-background;
 }
 
 .title {
@@ -172,7 +174,6 @@
   height: 50px;
   aspect-ratio: 164 / 101;
   margin-bottom: 5px;
-  background-color: $background;
 
   @include respond-to('xsmall') {
     height: 80px;
@@ -182,7 +183,6 @@
 .link {
   transition: all 0.1s ease-in-out;
   &:hover {
-    letter-spacing: 2px;
     color: $highlight;
   }
 }

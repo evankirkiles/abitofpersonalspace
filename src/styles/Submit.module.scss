@@ -28,8 +28,6 @@
   min-height: calc(100vh - $header-height);
   padding: 20px;
   animation: fadeup 0.3s ease-in-out;
-  background-color: $background;
-  background-image: radial-gradient(#c0c0c0 0.5px, $background 0.5px);
-  background-size: 20px 20px;
+  @include dot-background;
   user-select: auto;
 }

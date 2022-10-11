@@ -12,9 +12,6 @@
   cursor: pointer;
   transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out,
     background-position 0.3s ease-in-out;
-  background: linear-gradient(to right, $highlight 50%, white 50%);
-  background-size: 200% 100%;
-  background-position: right bottom;
   letter-spacing: -1px;
   white-space: nowrap;
   min-width: 100px;

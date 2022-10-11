@@ -110,7 +110,7 @@ const SubmitForm: React.FC = function () {
 
   return (
     <div className={s.container}>
-      <h1 className={s.title}>Submit your space.</h1>
+      <h1 className={s.title}>submit your space.</h1>
       <p className={s.subtext}>
         if you would like to contribute your own personal space to the project,
         follow the instructions here to create a scan. upon submission, i will
@@ -219,7 +219,7 @@ const SubmitForm: React.FC = function () {
                   className={s.input_field}
                   spellCheck={false}
                   value={description}
-                  minRows={1}
+                  minRows={3}
                   onChange={(event) => {
                     setDescription(event.target.value);
                   }}
@@ -252,12 +252,12 @@ const SubmitForm: React.FC = function () {
         </div>
       </form>
       <div className={s.submit_row}>
-        <input
-          type="submit"
-          form="spaceForm"
-          value="SUBMIT"
+        <div
           className={`${s.submit_button} ${canSubmit ? 'ready' : ''}`}
-        />
+          onClick={() => formRef.current?.requestSubmit()}
+        >
+          SUBMIT{' '}
+        </div>
       </div>
     </div>
   );

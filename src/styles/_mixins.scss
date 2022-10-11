@@ -4,8 +4,13 @@ $background2: var(--background-2-color);
 $foreground2: var(--foreground-2-color);
 $border: 1px solid #b0b0b0;
 $highlight: var(--highlight-color);
-
 $header-height: var(--header-height);
+
+@mixin dot-background {
+  background-color: $background;
+  background-image: radial-gradient($background2 0.5px, $background 0.5px);
+  background-size: 20px 20px;
+}
 
 $breakpoints: (
   'xsmall': (

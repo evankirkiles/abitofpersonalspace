@@ -1,0 +1,96 @@
+/*
+ * SpaceCard.module.scss
+ * author: evan kirkiles
+ * created on Mon Oct 10 2022
+ * 2022 the nobot space, 
+ */
+@import '../../styles/mixins';
+
+.container {
+  width: 100%;
+  // border: $border;
+  aspect-ratio: 1/1.5;
+  padding: 10px;
+  transition: transform 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  position: relative;
+  z-index: 0;
+
+  &:hover .img_container {
+    transform: perspective(1200px) translateZ(0px) translateX(0px)
+      translateY(0px) rotateY(60deg);
+  }
+}
+
+.meta_info {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  z-index: 2;
+  background-color: $background;
+  padding: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.title {
+  z-index: 20;
+}
+
+.author {
+  opacity: 0.5;
+  z-index: 20;
+}
+
+.location {
+  opacity: 0.3;
+  z-index: 20;
+}
+
+.created_at {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  writing-mode: vertical-lr;
+  opacity: 0.5;
+  font-size: 15px;
+}
+
+$img_padding: 20px;
+.img_container {
+  position: absolute;
+  top: $img_padding;
+  left: $img_padding;
+  width: calc(100% - ($img_padding * 2));
+  height: calc(100% - ($img_padding * 2));
+  z-index: 0;
+  transform-origin: right;
+  /*Speed of the Door animation*/
+  transition: all 0.3s ease-in-out;
+  overflow: visible;
+  cursor: pointer;
+  backface-visibility: hidden;
+  // &:hover {
+  //   transform: perspective(1200px) translateZ(0px) translateX(0px)
+  //     translateY(0px) rotateY(60deg);
+  // }
+}
+
+.door_image {
+  transform-origin: right;
+  /*Speed of the Door animation*/
+  transition: all 0.3s ease-in-out;
+  overflow: visible;
+  height: 100%;
+  width: 100%;
+  // &:hover {
+  //   transform: perspective(1200px) translateZ(0px) translateX(0px)
+  //     translateY(0px) rotateY(60deg);
+  // }
+}

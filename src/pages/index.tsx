@@ -24,6 +24,7 @@ import {
 import { useInfiniteQuery } from 'react-query';
 import Link from 'next/link';
 import * as APIt from '../supabase/types';
+import SpaceCard from '../components/SpaceCard/SpaceCard';
 
 const HomePage: React.FC = function Home() {
   // get the tags query to show in the filter bar
@@ -42,7 +43,7 @@ const HomePage: React.FC = function Home() {
     search: '',
     filter: undefined,
   };
-  const spacesQuery = useInfiniteQuery<APIt.Space[]>(
+  const { data: spaces } = useInfiniteQuery<APIt.Space[]>(
     spaceKeys.list(spaceParams),
     ({ pageParam = null }) => listSpaces(spaceParams, pageParam),
     {
@@ -51,15 +52,13 @@ const HomePage: React.FC = function Home() {
     }
   );
 
-  console.log(spacesQuery.data);
-
   return (
     <div className={s.container}>
       <Header />
       <div className={s.header_container}>
         <div className={s.main_container}>
           <h1 className={s.title}>A&nbsp;BIT&nbsp;OF PERSONAL&nbsp;SPACE</h1>
-          <div className={s.subtext}>
+          <div className={s.subtext} style={{ opacity: 0.8 }}>
             is an exploration into the places we call home. the spaces embodied
             here are <i>us</i>––they define our selves and our interactions with
             the world. yet what happens when we share these entirely personal
@@ -102,7 +101,32 @@ const HomePage: React.FC = function Home() {
           : null}
       </div>
       <div className={s.door_grid}>
-        <div className={s.door}>peter kirkiles</div>
+        {spaces?.pages
+          ? spaces.pages.flatMap((page) =>
+              page.map((space) => <SpaceCard key={space.id} space={space} />)
+            )
+          : null}
+        {spaces?.pages
+          ? spaces.pages.flatMap((page) =>
+              page.map((space) => <SpaceCard key={space.id} space={space} />)
+            )
+          : null}
+        {spaces?.pages
+          ? spaces.pages.flatMap((page) =>
+              page.map((space) => <SpaceCard key={space.id} space={space} />)
+            )
+          : null}
+        {spaces?.pages
+          ? spaces.pages.flatMap((page) =>
+              page.map((space) => <SpaceCard key={space.id} space={space} />)
+            )
+          : null}
+        {spaces?.pages
+          ? spaces.pages.flatMap((page) =>
+              page.map((space) => <SpaceCard key={space.id} space={space} />)
+            )
+          : null}
+        {/* <div className={s.door}>peter kirkiles</div>
         <div className={s.door}>HI</div>
         <div className={s.door}>HI</div>
         <div className={s.door}>HI</div>
@@ -111,7 +135,7 @@ const HomePage: React.FC = function Home() {
         <div className={s.door}>HI</div>
         <div className={s.door}>HI</div>
         <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
+        <div className={s.door}>HI</div> */}
       </div>
     </div>
   );
