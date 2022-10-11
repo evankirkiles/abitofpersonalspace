@@ -6,6 +6,15 @@
  */
 @import '../../styles/mixins';
 
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .container {
   width: 100%;
   // border: $border;
@@ -20,8 +29,16 @@
   z-index: 0;
 
   &:hover .img_container {
-    transform: perspective(1200px) translateZ(0px) translateX(0px)
-      translateY(0px) rotateY(60deg);
+    transform: perspective(1200px) rotateY(60deg);
+  }
+
+  &:hover .shadow_overlay {
+    display: block;
+  }
+
+  &:hover .img_preview {
+    display: block;
+    animation: fadein 0.6s ease-in-out;
   }
 }
 
@@ -44,13 +61,20 @@
 }
 
 .author {
-  opacity: 0.5;
   z-index: 20;
+  opacity: 0.8;
+  font-size: 13px;
+  font-weight: 100;
+
+  &::before {
+    content: ' - ';
+  }
 }
 
 .location {
   opacity: 0.3;
   z-index: 20;
+  font-size: 10px;
 }
 
 .created_at {
@@ -69,17 +93,40 @@ $img_padding: 20px;
   left: $img_padding;
   width: calc(100% - ($img_padding * 2));
   height: calc(100% - ($img_padding * 2));
-  z-index: 0;
+  z-index: 1;
   transform-origin: right;
   /*Speed of the Door animation*/
   transition: all 0.3s ease-in-out;
   overflow: visible;
   cursor: pointer;
   backface-visibility: hidden;
+  transform: translate3D(0, 0, 0);
   // &:hover {
   //   transform: perspective(1200px) translateZ(0px) translateX(0px)
   //     translateY(0px) rotateY(60deg);
   // }
+}
+
+$img_padding_inner: 30px;
+.shadow_overlay {
+  position: absolute;
+  top: $img_padding_inner;
+  left: $img_padding_inner;
+  width: calc(100% - ($img_padding_inner * 2));
+  height: calc(100% - ($img_padding_inner * 2));
+  z-index: 0;
+  display: none;
+  box-shadow: inset 0px 0px 20px 20px rgba(0, 0, 0, 1);
+}
+
+.img_preview {
+  position: absolute;
+  top: $img_padding_inner;
+  left: $img_padding_inner;
+  width: calc(100% - ($img_padding_inner * 2));
+  height: calc(100% - ($img_padding_inner * 2));
+  z-index: 0;
+  display: none;
 }
 
 .door_image {

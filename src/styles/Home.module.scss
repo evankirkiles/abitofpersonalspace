@@ -31,6 +31,9 @@
   top: calc($header-height - 1px);
   background-color: $background;
   z-index: 1;
+
+  // do this to keep on top of the doors transforming.
+  transform: translate3D(0, 0, 999px);
 }
 
 .door_grid {

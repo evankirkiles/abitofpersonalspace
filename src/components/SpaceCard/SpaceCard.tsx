@@ -16,14 +16,18 @@ type SpaceCardProps = {
 const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
   return (
     <div className={s.container}>
+      <div className={s.img_preview}>
+        <Image src={DOOR} className={s.door_image} alt={'a door'} />
+      </div>
+      <div className={s.shadow_overlay}></div>
       <div className={s.img_container}>
         <Image src={DOOR} className={s.door_image} alt={'a door'} />
         <div className={s.meta_info}>
-          <div className={s.title}>{space.title}</div>
-          {space.author ? <div className={s.author}>{space.author}</div> : null}
           {space.location ? (
             <div className={s.location}>{space.location}</div>
           ) : null}
+          <div className={s.title}>{space.title}</div>
+          {space.author ? <div className={s.author}>{space.author}</div> : null}
         </div>
       </div>
       <div className={s.created_at}>
