@@ -191,3 +191,39 @@
   opacity: 0.5;
   transform: translateY(100%);
 }
+
+.form_overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  color: $foreground;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 1px;
+  padding: 20%;
+  pointer-events: all;
+  z-index: 5;
+  transition: opacity 0.3s ease-in-out;
+
+  &[class~='enter'] {
+    opacity: 0;
+  }
+
+  &[class~='enter-active'] {
+    opacity: 1;
+  }
+
+  &[class~='exit'] {
+    opacity: 1;
+  }
+
+  &[class~='exit-active'] {
+    opacity: 0;
+  }
+}

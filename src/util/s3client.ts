@@ -8,10 +8,11 @@ import {
   S3Client,
   PutObjectCommand,
   ListObjectVersionsCommand,
+  GetObjectCommand,
 } from '@aws-sdk/client-s3';
 import * as APIt from '../supabase/types';
-import { createHash } from 'crypto';
 import getMD5Hash from './getMD5Hash';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 // s3 client for file uploads
 const s3client = new S3Client({
@@ -59,4 +60,16 @@ export const uploadFile = async (
     version: version,
     key: key,
   };
+};
+
+/**
+ * Gets a signed url for an object in an S3 bucket
+ * @param key
+ */
+export const getSignedFileUrl = async (key: string): Promise<string> => {
+  const command = new GetObjectCommand({
+    Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET,
+    Key: key,
+  });
+  return getSignedUrl(s3client, command, { expiresIn: 3600 });
 };

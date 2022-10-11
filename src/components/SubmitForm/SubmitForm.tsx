@@ -6,6 +6,7 @@
  */
 import { useRef, useState } from 'react';
 import FileUpload from '../FileUpload/FileUpload';
+import { CSSTransition } from 'react-transition-group';
 import TextareaAutosize from 'react-textarea-autosize';
 import s from './SubmitForm.module.scss';
 import { useMutation } from 'react-query';
@@ -15,10 +16,15 @@ import { insertSpace } from '../../supabase/api/spaces';
 import getImageDimensions from '../../util/getImageDimensions';
 import * as APIt from '../../supabase/types';
 import { insertSpacePrivate } from '../../supabase/api/spaces_private';
+import { useRouter } from 'next/router';
 
 const SubmitForm: React.FC = function () {
+  // use router for redirecting to space page when finished
+  const router = useRouter();
+
   // input field forms
   const formRef = useRef<HTMLFormElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const [doorFile, setDoorFile] = useState<File | null>(null);
   const [spaceFile, setSpaceFile] = useState<File | null>(null);
   const [title, setTitle] = useState<string>('');
@@ -93,7 +99,12 @@ const SubmitForm: React.FC = function () {
     },
     {
       onSuccess: () => {
-        console.log('uploaded!');
+        // redirect to home on success
+        router.push('/');
+      },
+      onError: () => {
+        // do not redirect on error
+        setStatusMessage(null);
       },
     }
   );
@@ -250,10 +261,24 @@ const SubmitForm: React.FC = function () {
         <div className={s.form_required_note}>
           <span className={s.required}></span> marks a required field.
         </div>
+        <CSSTransition
+          appear
+          mountOnEnter
+          unmountOnExit
+          in={submit.isLoading}
+          timeout={300}
+          nodeRef={overlayRef}
+        >
+          <div className={s.form_overlay} ref={overlayRef}>
+            {statusMessage}
+          </div>
+        </CSSTransition>
       </form>
       <div className={s.submit_row}>
         <div
-          className={`${s.submit_button} ${canSubmit ? 'ready' : ''}`}
+          className={`${s.submit_button} ${
+            canSubmit && !submit.isLoading ? 'ready' : ''
+          }`}
           onClick={() => formRef.current?.requestSubmit()}
         >
           SUBMIT{' '}

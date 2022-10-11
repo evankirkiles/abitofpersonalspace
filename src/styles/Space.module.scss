@@ -66,12 +66,19 @@ $overlay_offset: 10px;
   width: calc(100% - ($overlay_offset * 2));
   height: calc(100% - ($overlay_offset * 2));
   padding: 10px;
+  z-index: 2;
+  pointer-events: none;
   display: grid;
   grid-template:
     [header-left] 'title logo credits' 1fr [header-right]
     [main-left] '. loading .' 1fr [main-right]
     [footer-left] 'more . instructions' 1fr [footer-right]
     / 1fr 1fr 1fr;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  & > div {
+    pointer-events: all;
+  }
 }
 
 .title {

@@ -16,6 +16,9 @@ import s from '../../styles/Space.module.scss';
 import Logo from '../../components/Logo/Logo';
 import Link from 'next/link';
 import getSeasonString from '../../util/getSeasonString';
+import { useEffect, useState } from 'react';
+import { getSignedFileUrl } from '../../util/s3client';
+import Space from '../../components/Space/Space';
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPING                                   */
@@ -44,6 +47,16 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
     }
   );
 
+  // keep track of the world's object url
+  const [world, setWorld] = useState<string | null>(null);
+  useEffect(() => {
+    if (space) {
+      getSignedFileUrl(space.file_space.key).then((worldUrl) => {
+        setWorld(worldUrl);
+      });
+    }
+  }, [space]);
+
   return (
     <>
       <Head>
@@ -63,6 +76,7 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
         />
       </Head>
       <div className={s.container}>
+        {world ? <Space world={world} /> : null}
         <div className={s.overlay}>
           <Link href="/">
             <div className={s.title}>
