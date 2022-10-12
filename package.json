@@ -18,6 +18,7 @@
     "@supabase/auth-helpers-nextjs": "^0.2.9",
     "@supabase/auth-helpers-react": "^0.2.3",
     "@supabase/supabase-js": "^1.35.7",
+    "camera-controls": "^1.37.2",
     "cannon-es": "^0.19.0",
     "cannon-es-debugger": "^1.0.0",
     "hamburger-react": "^2.5.0",

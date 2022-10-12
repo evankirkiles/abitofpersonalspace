@@ -72,8 +72,10 @@ export class Scenario {
   public async launch(world: World) {
     await Promise.all(this.spawnPoints.map((sp) => sp.spawn(world)));
     if (!this.spawnAlways) {
-      world.cameraOperator.theta = this.initialCameraAngle || 0;
-      world.cameraOperator.phi = 15;
+      const theta = this.initialCameraAngle || 0;
+      const tan_az = Math.cos(15) * Math.tan(theta);
+      world.cameraController.distance = 1;
+      world.cameraController.azimuthAngle = Math.atan(tan_az);
     }
   }
 }

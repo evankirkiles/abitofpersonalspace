@@ -98,7 +98,7 @@ export class CameraOperator implements IInputReceiver, IUpdatable {
     };
 
     // add the camera as an updatable
-    world.registerUpdatable(this);
+    // world.registerUpdatable(this);
   }
 
   /* -------------------------------------------------------------------------- */
@@ -137,6 +137,7 @@ export class CameraOperator implements IInputReceiver, IUpdatable {
    * Runs one step of updating the camera. TODO: add offset
    */
   public update(): void {
+    return;
     // wwhen following, keep position offset from target
     if (this.followMode === true) {
       this.camera.position.y = THREE.MathUtils.clamp(

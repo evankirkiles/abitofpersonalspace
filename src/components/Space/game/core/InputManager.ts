@@ -95,28 +95,28 @@ export class InputManager implements IUpdatable {
     this.isListening = true;
 
     // Mouse
-    this.world.target.addEventListener(
-      'mousedown',
-      this.boundOnMouseDown,
-      false
-    );
-    document.addEventListener('wheel', this.boundOnMouseWheelMove, false);
+    // this.world.target.addEventListener(
+    //   'mousedown',
+    //   this.boundOnMouseDown,
+    //   false
+    // );
+    // document.addEventListener('wheel', this.boundOnMouseWheelMove, false);
 
     // Keys
     document.addEventListener('keydown', this.boundOnKeyDown, false);
     document.addEventListener('keyup', this.boundOnKeyUp, false);
 
     // Pointer lock
-    document.addEventListener(
-      'pointerlockchange',
-      this.boundOnPointerlockChange,
-      false
-    );
-    document.addEventListener(
-      'pointerlockerror',
-      this.boundOnPointerlockError,
-      false
-    );
+    // document.addEventListener(
+    //   'pointerlockchange',
+    //   this.boundOnPointerlockChange,
+    //   false
+    // );
+    // document.addEventListener(
+    //   'pointerlockerror',
+    //   this.boundOnPointerlockError,
+    //   false
+    // );
   }
 
   /**
@@ -127,22 +127,22 @@ export class InputManager implements IUpdatable {
     this.isListening = false;
 
     // Mouse
-    this.world.target.removeEventListener(
-      'mousedown',
-      this.boundOnMouseDown,
-      false
-    );
-    this.world.target.removeEventListener(
-      'mousemove',
-      this.boundOnMouseMove,
-      false
-    );
-    this.world.target.removeEventListener(
-      'mouseup',
-      this.boundOnMouseUp,
-      false
-    );
-    document.removeEventListener('wheel', this.boundOnMouseWheelMove, false);
+    // this.world.target.removeEventListener(
+    //   'mousedown',
+    //   this.boundOnMouseDown,
+    //   false
+    // );
+    // this.world.target.removeEventListener(
+    //   'mousemove',
+    //   this.boundOnMouseMove,
+    //   false
+    // );
+    // this.world.target.removeEventListener(
+    //   'mouseup',
+    //   this.boundOnMouseUp,
+    //   false
+    // );
+    // document.removeEventListener('wheel', this.boundOnMouseWheelMove, false);
 
     // Keys
     document.removeEventListener('keydown', this.boundOnKeyDown, false);
@@ -161,7 +161,7 @@ export class InputManager implements IUpdatable {
    */
   public onMouseDown(event: MouseEvent): void {
     if (this.pointerLock) {
-      this.domElement.requestPointerLock();
+      // this.domElement.requestPointerLock();
     } else {
       this.domElement.addEventListener(
         'mousemove',

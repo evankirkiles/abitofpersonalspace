@@ -684,7 +684,6 @@ export class Nobot
    */
   public readNobotAnimations(gltf: GLTF): void {
     this.animations = gltf.animations;
-    console.log(this.animations);
   }
 
   /* -------------------------------------------------------------------------- */
@@ -768,7 +767,7 @@ export class Nobot
     deltaX: number,
     deltaY: number
   ): void {
-    this.world?.cameraOperator.move(deltaX, deltaY);
+    // this.world?.cameraOperator.move(deltaX, deltaY);
   }
 
   /**
@@ -814,7 +813,10 @@ export class Nobot
         this.position,
         this.world.camera.position
       );
-      this.getWorldPosition(this.world.cameraOperator.target);
+      const v = new THREE.Vector3();
+      this.getWorldPosition(v);
+      this.world.cameraController.setTarget(v.x, v.y, v.z);
+      // this.getWorldPosition(this.world.cameraController.target);
     }
   }
 

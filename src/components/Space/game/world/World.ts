@@ -13,6 +13,7 @@ import _ from 'lodash';
 import * as THREE from 'three';
 import { computeBoundsTree, disposeBoundsTree } from 'three-mesh-bvh';
 import { GLTF } from 'three-stdlib';
+import CameraController from 'camera-controls';
 import { CameraOperator } from '../core/CameraOperator';
 import * as Utils from '../core/FunctionLibrary';
 import { InputManager } from '../core/InputManager';
@@ -27,10 +28,13 @@ import { Scenario } from './Scenario';
 // Add the extension functions
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+// initialize camera controller
+CameraController.install({ THREE });
 export class World {
   // game properties
   public renderer: THREE.WebGLRenderer;
   public camera: THREE.PerspectiveCamera;
+  public cameraController: CameraController;
 
   // world assets
   public graphicsWorld: THREE.Scene;
@@ -110,6 +114,10 @@ export class World {
     this.graphicsWorld = new THREE.Scene();
     const { width, height } = target.getBoundingClientRect();
     this.camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1010);
+    this.cameraController = new CameraController(
+      this.camera,
+      this.renderer.domElement
+    );
     onWindowResize();
 
     // physics
@@ -136,7 +144,7 @@ export class World {
     this.cameraOperator = new CameraOperator(this, this.camera, 1);
     this.loadingManager = new LoadingManager(this, {
       onStart: callbacks.onDownloadStart,
-      onProgress: (p) => console.log(p),
+      // onProgress: (p) => console.log(p),
       onFinished: callbacks.onDownloadFinish,
     });
 
@@ -221,6 +229,8 @@ export class World {
     this.updatables.forEach((entity) => {
       entity.update(timeStep, unscaledTimeStep);
     });
+    // update camera
+    this.cameraController.update(timeStep);
 
     // Lerp time scale
     this.timeScale = THREE.MathUtils.lerp(
@@ -330,7 +340,8 @@ export class World {
         if (child.type === 'Mesh') {
           Utils.setUpMeshProperties(child as THREE.Mesh);
           (child as THREE.Mesh).geometry.computeBoundsTree();
-          this.raycastScene.push(child as THREE.Mesh);
+          // this.cameraController.colliderMeshes.push(child);
+          // this.raycastScene.push(child as THREE.Mesh);
         }
         // check if the child has physics data
         if (Object.prototype.hasOwnProperty.call(child.userData, 'data')) {
