@@ -6,12 +6,6 @@ $border: 1px solid #b0b0b0;
 $highlight: var(--highlight-color);
 $header-height: var(--header-height);
 
-@mixin dot-background {
-  background-color: $background;
-  background-image: radial-gradient($background2 1px, $background 1px);
-  background-size: 20px 20px;
-}
-
 $breakpoints: (
   'xsmall': (
     min-width: 480px,
@@ -47,5 +41,15 @@ $breakpoints: (
   @else {
     @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
         + "Available breakpoints are: #{map-keys($breakpoints)}.";
+  }
+}
+
+@mixin dot-background {
+  background-color: $background;
+  background-image: radial-gradient($background2 0.5px, $background 0.5px);
+  background-size: 20px 20px;
+
+  @include respond-to('xl') {
+    background-image: radial-gradient($background2 1px, $background 1px);
   }
 }

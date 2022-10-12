@@ -72,8 +72,8 @@
   justify-content: flex-start;
   align-items: flex-start;
   position: relative;
-  padding: 20px;
-  padding-top: 10px;
+  padding: 10px;
+  padding-top: 5px;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 
@@ -83,6 +83,10 @@
 
   div[class~='enter-done'] > & {
     opacity: 1;
+  }
+
+  @include respond-to('small') {
+    padding: 10px 20px;
   }
 }
 
@@ -110,6 +114,7 @@
     flex-direction: row;
     width: 100%;
     justify-content: flex-end;
+    align-items: center;
     gap: 10px;
   }
 }
@@ -117,4 +122,33 @@
 .contact_info {
   opacity: 0.5;
   font-style: italic;
+  transition: color 0.1s ease-in-out;
+
+  &:hover {
+    color: $highlight;
+  }
+}
+
+.socials_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  font-size: 20px;
+  opacity: 0.5;
+  gap: 5px;
+
+  a {
+    display: flex;
+    transition: color 0.1s ease-in-out;
+
+    &:hover {
+      color: $highlight;
+    }
+  }
+
+  @include respond-to('small') {
+    height: 100%;
+  }
 }

@@ -10,6 +10,7 @@ import { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import NavLink from '../NavLink/NavLink';
 import s from './NavMenu.module.scss';
+import { RiGithubLine, RiInstagramLine } from 'react-icons/ri';
 
 type NavMenuProps = {
   toggled?: boolean;
@@ -40,12 +41,30 @@ const NavMenu: React.FC<NavMenuProps> = function NavMenu({
         <div className={s.nav_container} ref={menuRef}>
           <div className={s.nav_content}>
             <div className={s.nav_column}>
-              <NavLink href="/submit">→ submit</NavLink>
-              <NavLink href="/guide">→ guide</NavLink>
-              <NavLink href="/about">→ about</NavLink>
-              <NavLink href="/credits">→ credits</NavLink>
+              <NavLink href="/submit">→&nbsp;submit</NavLink>
+              <NavLink href="/guide">→&nbsp;guide</NavLink>
+              <NavLink href="/about">→&nbsp;about</NavLink>
+              <NavLink href="/credits">→&nbsp;credits</NavLink>
             </div>
             <div className={s.nav_column_2}>
+              <div>Socials:</div>
+              <div className={s.socials_row}>
+                <a
+                  href="https://instagram.com/abitofpersonalspace"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <RiInstagramLine />
+                </a>
+                <a
+                  href="https://github.com/evankirkiles/abitofpersonalspace"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <RiGithubLine />
+                </a>
+              </div>
+              <div style={{ flex: 1 }}></div>
               <div>Contact:</div>
               <div className={s.contact_info}>
                 <a href="mailto:evan.kirkiles@yale.edu">
