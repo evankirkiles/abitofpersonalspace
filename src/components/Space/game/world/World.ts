@@ -25,6 +25,7 @@ import { Nobot } from '../nobots/Nobot';
 import { BoxCollider } from '../physics/colliders/BoxCollider';
 import { TrimeshCollider } from '../physics/colliders/TrimeshCollider';
 import { Scenario } from './Scenario';
+
 // Add the extension functions
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
@@ -35,6 +36,13 @@ export class World {
   public renderer: THREE.WebGLRenderer;
   public camera: THREE.PerspectiveCamera;
   public cameraController: CameraController;
+
+  // pixellated downsampling
+  public renderTargetQuad: THREE.Mesh;
+  public renderTargetScene: THREE.Scene;
+  public renderTargetCamera: THREE.OrthographicCamera;
+  public renderTarget: THREE.WebGLRenderTarget;
+  public materialScreen: THREE.ShaderMaterial;
 
   // world assets
   public graphicsWorld: THREE.Scene;
@@ -95,9 +103,57 @@ export class World {
 
     // initialize Renderer
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
-    this.renderer.setPixelRatio(0.3);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // render target for reducing pixel ratio
+    this.renderTargetScene = new THREE.Scene();
+    this.renderTargetCamera = new THREE.OrthographicCamera(
+      window.innerWidth / -2,
+      window.innerWidth / 2,
+      window.innerHeight / 2,
+      window.innerHeight / -2,
+      -10000,
+      10000
+    );
+    this.renderTargetCamera.position.z = 1;
+    this.renderTarget = new THREE.WebGLRenderTarget(
+      this.renderer.domElement.clientWidth / 4,
+      this.renderer.domElement.clientHeight / 4,
+      {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.NearestFilter,
+        format: THREE.RGBAFormat,
+      }
+    );
+
+    // quad to display render target on
+    this.materialScreen = new THREE.ShaderMaterial({
+      uniforms: { tDiffuse: { value: this.renderTarget.texture } },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform sampler2D tDiffuse;
+        void main() {
+          gl_FragColor = texture2D(tDiffuse, vUv);
+        }
+      `,
+      depthWrite: false,
+    });
+    const plane = new THREE.PlaneGeometry(
+      this.renderer.domElement.clientWidth,
+      this.renderer.domElement.clientHeight
+    );
+    this.renderTargetQuad = new THREE.Mesh(plane, this.materialScreen);
+    this.renderTargetQuad.position.z = -100;
+    this.renderTargetScene.add(this.renderTargetQuad);
 
     // set up resizing on window size change
     const onWindowResize = () => {
@@ -106,6 +162,14 @@ export class World {
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(width, height, false);
+      this.renderTarget.setSize(width / 4, height / 4);
+      this.renderTargetQuad.geometry.dispose();
+      this.renderTargetQuad.geometry = new THREE.PlaneGeometry(width, height);
+      this.renderTargetCamera.top = height / 2;
+      this.renderTargetCamera.bottom = height / -2;
+      this.renderTargetCamera.left = width / -2;
+      this.renderTargetCamera.right = width / 2;
+      this.renderTargetCamera.updateProjectionMatrix();
     };
     this.listeners.resize = [onWindowResize];
     window.addEventListener('resize', onWindowResize, false);
@@ -211,8 +275,14 @@ export class World {
       this.requestDelta + this.renderDelta + this.logicDelta;
     this.sinceLastFrame %= interval;
 
-    // render the world
+    // render the world to the texture
+    this.renderer.setRenderTarget(this.renderTarget);
+    this.renderer.clear();
     this.renderer.render(this.graphicsWorld, this.camera);
+    // now render the full screen quad with the texture
+    this.renderer.setRenderTarget(null);
+    this.renderer.clear();
+    this.renderer.render(this.renderTargetScene, this.renderTargetCamera);
     this.renderDelta = this.clock.getDelta();
   }
 
