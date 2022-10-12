@@ -30,7 +30,7 @@
 
 .visible_bar {
   height: $header-height;
-  border-bottom: $border;
+  // border-bottom: $border;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -88,11 +88,8 @@
 
 .menu_text {
   display: none;
-  margin-left: 20px;
+  width: 70px;
   @include respond-to('xsmall') {
     display: block;
   }
-  // @include respond-to('small') {
-  //   display: none;
-  // }
 }

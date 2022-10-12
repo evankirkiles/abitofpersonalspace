@@ -8,7 +8,7 @@ $header-height: var(--header-height);
 
 @mixin dot-background {
   background-color: $background;
-  background-image: radial-gradient($background2 0.5px, $background 0.5px);
+  background-image: radial-gradient($background2 1px, $background 1px);
   background-size: 20px 20px;
 }
 
@@ -25,7 +25,7 @@ $breakpoints: (
   'large': (
     min-width: 1200px,
   ),
-  'xl': (
+  'xlarge': (
     min-width: 1500px,
   ),
 ) !default;

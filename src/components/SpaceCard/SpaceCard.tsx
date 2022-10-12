@@ -36,7 +36,11 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
             src={space.file_door?.object.key}
             className={s.door_image}
             alt={'a door'}
-            sizes={`200px`}
+            sizes={`
+            (max-width: 767px) 150px,
+            (max-width: 1500px) 200px,
+            300px 
+            `}
           />
           {/* <Image src={DOOR} className={s.door_image} alt={'a door'} /> */}
           <div className={s.meta_info}>

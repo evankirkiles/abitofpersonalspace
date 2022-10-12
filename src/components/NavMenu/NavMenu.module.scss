@@ -1,0 +1,120 @@
+/*
+ * NavMenu.module.scss
+ * author: evan kirkiles
+ * created on Tue Oct 11 2022
+ * 2022 the nobot space, 
+ */
+@import '../../styles/mixins';
+
+.nav_menu_backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 4;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3D(0, 0, 500px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  cursor: pointer;
+
+  &[class~='enter-active'] {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &[class~='enter-done'] {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  // @include respond-to('medium') {
+  //   opacity: 0 !important;
+  //   pointer-events: none;
+  // }
+}
+
+.nav_container {
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  position: fixed;
+  width: 100vw;
+  top: $header-height;
+  background-color: $background;
+  backdrop-filter: blur(4px);
+  transform: translate3D(0, calc(-100% + 1px), 501px);
+  transition: transform 0.3s ease-in-out;
+  border-bottom: 1px solid $foreground;
+
+  &[class~='enter-active'] {
+    transform: translate3D(0, 0px, 501px);
+  }
+
+  &[class~='enter-done'] {
+    transform: translate3D(0, 0px, 501px);
+  }
+
+  // @include respond-to('medium') {
+  //   transform: translate3D(0, calc(-100% + 1px), 501px) !important;
+  // }
+}
+
+.nav_content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: relative;
+  padding: 20px;
+  padding-top: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  div[class~='enter-active'] > & {
+    opacity: 1;
+  }
+
+  div[class~='enter-done'] > & {
+    opacity: 1;
+  }
+}
+
+.nav_column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 10px;
+  height: 100%;
+
+  @include respond-to('small') {
+    display: none;
+  }
+}
+
+.nav_column_2 {
+  @extend .nav_column;
+  align-items: flex-end;
+  gap: 2px;
+  display: flex;
+
+  @include respond-to('small') {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+}
+
+.contact_info {
+  opacity: 0.5;
+  font-style: italic;
+}
