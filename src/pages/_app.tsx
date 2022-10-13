@@ -9,6 +9,7 @@ import { AppProps } from 'next/app';
 import { ImgixProvider } from 'react-imgix';
 import '../styles/globals.scss';
 import '../styles/fonts.scss';
+import '../styles/nipple.scss';
 import '../styles/lazyloadimgs.scss';
 import 'lazysizes';
 import 'lazysizes/plugins/attrchange/ls.attrchange';

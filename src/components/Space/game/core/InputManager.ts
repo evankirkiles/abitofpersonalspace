@@ -7,6 +7,9 @@
 import { IInputReceiver } from '../interfaces/IInputReceiver';
 import { IUpdatable } from '../interfaces/IUpdatable';
 import { World } from '../world/World';
+import type NippleJs from 'nipplejs';
+
+let nipplejs: typeof NippleJs;
 
 export class InputManager implements IUpdatable {
   public updateOrder: number = 3;
@@ -15,20 +18,26 @@ export class InputManager implements IUpdatable {
   public world: World;
   public domElement: HTMLElement;
 
+  // nipple for mobile controls
+  public nippleDomElement: HTMLDivElement;
+  public nippleManager?: ReturnType<typeof nipplejs.create>;
+  public nippleState: string = 'end';
+
+  // is the device a touch screen? if so, add nipple
+  public isTouchScreen: boolean = false;
+
   // is listening to input?
   public isListening: boolean = false;
   public pointerLock: boolean = true;
   public isLocked: boolean = false;
 
   // bind listeners
-  public boundOnMouseDown: (evt: MouseEvent) => void;
-  public boundOnMouseMove: (evt: MouseEvent) => void;
-  public boundOnMouseUp: (evt: MouseEvent) => void;
-  public boundOnMouseWheelMove: (evt: WheelEvent) => void;
   public boundOnKeyDown: (evt: KeyboardEvent) => void;
   public boundOnKeyUp: (evt: KeyboardEvent) => void;
-  public boundOnPointerlockChange: (evt: Event) => void;
-  public boundOnPointerlockError: (evt: Event) => void;
+  public boundOnNippleMove: (
+    evt: NippleJs.EventData,
+    data: NippleJs.JoystickOutputData
+  ) => void;
 
   // receiver of the inputs
   public inputReceiver?: IInputReceiver;
@@ -42,18 +51,29 @@ export class InputManager implements IUpdatable {
     this.world = world;
     this.domElement = domElement || document.body;
 
-    // bindings for later event use
-    //  - mouse
-    this.boundOnMouseDown = (evt) => this.onMouseDown(evt);
-    this.boundOnMouseMove = (evt) => this.onMouseMove(evt);
-    this.boundOnMouseUp = (evt) => this.onMouseUp(evt);
-    this.boundOnMouseWheelMove = (evt) => this.onMouseWheelMove(evt);
+    // check if we're on a touch screen
+    this.isTouchScreen =
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      (navigator as any).msMaxTouchPoints > 0;
+    this.nippleDomElement = document.createElement('div');
+    this.nippleDomElement.style.position = 'absolute';
+    this.nippleDomElement.style.bottom = '0px';
+    this.nippleDomElement.style.right = '0px';
+    this.nippleDomElement.style.width = '85px';
+    this.nippleDomElement.style.height = '85px';
+    this.nippleDomElement.style.zIndex = '1';
+
+    // nipple dom element
+    if (this.isTouchScreen) {
+      nipplejs = require('nipplejs');
+    }
+
     //  - keys
     this.boundOnKeyDown = (evt) => this.onKeyDown(evt);
     this.boundOnKeyUp = (evt) => this.onKeyUp(evt);
-    //  - pointer lock
-    this.boundOnPointerlockChange = (evt) => this.onPointerLockChange(evt);
-    this.boundOnPointerlockError = (evt) => this.onPointerLockError(evt);
+    //  - nipple
+    this.boundOnNippleMove = (evt, data) => this.onNippleMove(evt, data);
 
     // now start listening
     this.listen();
@@ -94,29 +114,20 @@ export class InputManager implements IUpdatable {
     if (this.isListening) return;
     this.isListening = true;
 
-    // Mouse
-    // this.world.target.addEventListener(
-    //   'mousedown',
-    //   this.boundOnMouseDown,
-    //   false
-    // );
-    // document.addEventListener('wheel', this.boundOnMouseWheelMove, false);
-
     // Keys
     document.addEventListener('keydown', this.boundOnKeyDown, false);
     document.addEventListener('keyup', this.boundOnKeyUp, false);
 
-    // Pointer lock
-    // document.addEventListener(
-    //   'pointerlockchange',
-    //   this.boundOnPointerlockChange,
-    //   false
-    // );
-    // document.addEventListener(
-    //   'pointerlockerror',
-    //   this.boundOnPointerlockError,
-    //   false
-    // );
+    // add nipple
+    if (this.isTouchScreen) {
+      this.domElement.append(this.nippleDomElement);
+      this.nippleManager = nipplejs.create({
+        zone: this.nippleDomElement,
+        mode: 'static',
+      });
+      this.nippleManager.on('dir', this.boundOnNippleMove);
+      this.nippleManager.on('end', this.boundOnNippleMove);
+    }
   }
 
   /**
@@ -126,91 +137,22 @@ export class InputManager implements IUpdatable {
     if (!this.isListening) return;
     this.isListening = false;
 
-    // Mouse
-    // this.world.target.removeEventListener(
-    //   'mousedown',
-    //   this.boundOnMouseDown,
-    //   false
-    // );
-    // this.world.target.removeEventListener(
-    //   'mousemove',
-    //   this.boundOnMouseMove,
-    //   false
-    // );
-    // this.world.target.removeEventListener(
-    //   'mouseup',
-    //   this.boundOnMouseUp,
-    //   false
-    // );
-    // document.removeEventListener('wheel', this.boundOnMouseWheelMove, false);
-
     // Keys
     document.removeEventListener('keydown', this.boundOnKeyDown, false);
     document.removeEventListener('keyup', this.boundOnKeyUp, false);
+
+    // remove nipple
+    if (this.isTouchScreen) {
+      this.nippleDomElement.remove();
+      if (this.nippleManager) {
+        this.nippleManager.destroy();
+      }
+    }
   }
 
   /* -------------------------------------------------------------------------- */
   /*                                  LISTENERS                                 */
   /* -------------------------------------------------------------------------- */
-
-  /* ---------------------------------- MOUSE --------------------------------- */
-
-  /**
-   * Funnels a MouseDown event through to the input receiver
-   * @param event A MouseDown event
-   */
-  public onMouseDown(event: MouseEvent): void {
-    if (this.pointerLock) {
-      // this.domElement.requestPointerLock();
-    } else {
-      this.domElement.addEventListener(
-        'mousemove',
-        this.boundOnMouseMove,
-        false
-      );
-      this.domElement.addEventListener('mouseup', this.boundOnMouseUp, false);
-    }
-    if (this.inputReceiver)
-      this.inputReceiver.handleMouseButton(event, `mouse${event.button}`, true);
-  }
-
-  /**
-   * Funnels a MouseMove event through to the input receiver
-   * @param event A MouseMove event
-   */
-  public onMouseMove(event: MouseEvent): void {
-    if (this.inputReceiver)
-      this.inputReceiver.handleMouseMove(
-        event,
-        event.movementX,
-        event.movementY
-      );
-  }
-
-  /**
-   * Funnels a MouseUp event through to the input receiver
-   * @param event A MouseUp event
-   */
-  public onMouseUp(event: MouseEvent): void {
-    if (!this.pointerLock) {
-      this.domElement.removeEventListener(
-        'mousemove',
-        this.boundOnMouseMove,
-        false
-      );
-      this.domElement.removeEventListener(
-        'mouseup',
-        this.boundOnMouseUp,
-        false
-      );
-    }
-    if (this.inputReceiver)
-      this.inputReceiver.handleMouseButton(
-        event,
-        `mouse${event.button}`,
-        false
-      );
-  }
 
   /* -------------------------------- KEYBOARD -------------------------------- */
 
@@ -232,61 +174,20 @@ export class InputManager implements IUpdatable {
       this.inputReceiver.handleKeyboardEvent(event, event.code, false);
   }
 
-  /* ------------------------------- MOUSE WHEEL ------------------------------ */
+  /* -------------------------------- NIPPLE -------------------------------- */
 
   /**
-   * Funnels a MouseWheelMove event through to the input receiver
-   * @param event A MouseWheelMove event
+   * Funnels an OnKeyDown event through to the input receiver
+   * @param event A KeyDown event
    */
-  public onMouseWheelMove(event: WheelEvent): void {
-    if (this.inputReceiver)
-      this.inputReceiver.handleMouseWheel(event, event.deltaY);
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                POINTER LOCK                                */
-  /* -------------------------------------------------------------------------- */
-
-  /**
-   * Enable / disable pointer lock, keeping cursor in the dom element
-   */
-  public setPointerLock(enabled: boolean): void {
-    this.pointerLock = enabled;
-  }
-
-  /**
-   * When pointer lock begins or ends, bind / remove mouse listeners
-   * @param event
-   */
-  public onPointerLockChange(event: Event): void {
-    if (document.pointerLockElement === this.domElement) {
-      this.domElement.addEventListener(
-        'mousemove',
-        this.boundOnMouseMove,
-        false
-      );
-      this.domElement.addEventListener('mouseup', this.boundOnMouseUp, false);
-      this.isLocked = true;
-    } else {
-      this.domElement.removeEventListener(
-        'mousemove',
-        this.boundOnMouseMove,
-        false
-      );
-      this.domElement.removeEventListener(
-        'mouseup',
-        this.boundOnMouseUp,
-        false
-      );
-      this.isLocked = false;
+  public onNippleMove(
+    evt: NippleJs.EventData,
+    data: NippleJs.JoystickOutputData
+  ): void {
+    const nippleState = evt.type === 'end' ? 'end' : data.direction.angle;
+    if (this.inputReceiver && nippleState !== this.nippleState) {
+      this.nippleState = nippleState;
+      this.inputReceiver.handleNippleEvent(this.nippleState);
     }
-  }
-
-  /**
-   * Sometimes, we can't use pointer lock.
-   * @param event
-   */
-  public onPointerLockError(event: Event): void {
-    console.error('PointerLockControls: Unable to use Pointer Lock API.', this);
   }
 }

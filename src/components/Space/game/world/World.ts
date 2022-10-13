@@ -118,6 +118,8 @@ export class World {
       this.camera,
       this.renderer.domElement
     );
+    this.cameraController.minDistance = 1;
+    this.cameraController.maxDistance = 20;
     onWindowResize();
 
     // physics

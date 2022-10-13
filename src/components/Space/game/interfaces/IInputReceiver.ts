@@ -6,15 +6,14 @@
  */
 
 import { KeyBinding } from '../core/KeyBinding';
+import type NippleJs from 'nipplejs';
 
 export interface IInputReceiver {
   actions: { [action: string]: KeyBinding };
 
   // event handlers
   handleKeyboardEvent(e: KeyboardEvent, code: string, pressed: boolean): void;
-  handleMouseButton(event: MouseEvent, code: string, pressed: boolean): void;
-  handleMouseMove(event: MouseEvent, deltaX: number, deltaY: number): void;
-  handleMouseWheel(event: WheelEvent, value: number): void;
+  handleNippleEvent(state: string): void;
 
   // initialization and updating
   inputReceiverInit(): void;

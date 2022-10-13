@@ -1,0 +1,19 @@
+/*
+ * nipple.scss
+ * author: evan kirkiles
+ * created on Thu Oct 13 2022
+ * 2022 the nobot space, 
+ */
+@import './mixins';
+
+.nipple .back {
+  opacity: 1 !important;
+  border: 1px solid $foreground !important;
+  background-color: transparent !important;
+}
+
+.nipple .front {
+  opacity: 1 !important;
+  border: 1px solid $foreground !important;
+  background-color: $background !important;
+}

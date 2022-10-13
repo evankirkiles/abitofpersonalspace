@@ -6,6 +6,7 @@
  */
 import * as CANNON from 'cannon-es';
 import _ from 'lodash';
+import { EventData, JoystickOutputData } from 'nipplejs';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
 import * as Utils from '../core/FunctionLibrary';
@@ -114,6 +115,7 @@ export class Nobot
 
   // action map
   public actions: { [key: string]: KeyBinding };
+  public joystickState: 'end' | 'left' | 'right' | 'down' | 'up' = 'end';
 
   /* -------------------------------------------------------------------------- */
   /*                               INITIALIZATION                               */
@@ -736,48 +738,13 @@ export class Nobot
   }
 
   /**
-   * Funnels a mouse button event through to its action handler for the nobot.
-   * @param event The mouse event passed from an InputManager
-   * @param code The button pressed by the mouse
-   * @param pressed Whether or not the button was pressed or released
+   * Funnels a keyboard event through to its action handler for the nobot.
+   * @param event The nipple event passed from an InputManager
+   * @param data The state of the joystick
    */
-  public handleMouseButton(
-    event: MouseEvent,
-    code: string,
-    pressed: boolean
-  ): void {
-    Object.keys(this.actions).forEach((action) => {
-      if (Object.prototype.hasOwnProperty.call(this.actions, action)) {
-        const binding = this.actions[action];
-        if (_.includes(binding.eventCodes, code)) {
-          this.triggerAction(action, pressed);
-        }
-      }
-    });
-  }
-
-  /**
-   * Funnels a mouse move event through to its action handler for the nobot.
-   * @param event The mouse event passed from an InputManager
-   * @param deltaX The motion of the mouse on the X axis
-   * @param deltaY The motion of the mouse on the Y axis
-   */
-  public handleMouseMove(
-    event: MouseEvent,
-    deltaX: number,
-    deltaY: number
-  ): void {
-    // this.world?.cameraOperator.move(deltaX, deltaY);
-  }
-
-  /**
-   * Funnels a wheel event through to its action handler for the nobot.
-   * @param event The wheel event passed from an InputManager
-   * @param value The deltaY of the wheel move
-   */
-  public handleMouseWheel(event: WheelEvent, value: number): void {
-    // DO SOMETHING WITH SCROLL (ZOOM?)
-    const a = this;
+  public handleNippleEvent(state: string): void {
+    this.joystickState = state as any;
+    this.nobotState.onInputChange();
   }
 
   /* -------------------------------------------------------------------------- */
@@ -829,15 +796,14 @@ export class Nobot
    * @returns
    */
   public getLocalMovementDirection(): THREE.Vector3 {
-    const positiveX = this.actions.right.isPressed ? -1 : 0;
-    const negativeX = this.actions.left.isPressed ? 1 : 0;
-    const positiveZ = this.actions.up.isPressed ? 1 : 0;
-    const negativeZ = this.actions.down.isPressed ? -1 : 0;
-    return new THREE.Vector3(
-      positiveX + negativeX,
-      0,
-      positiveZ + negativeZ
-    ).normalize();
+    const px =
+      this.actions.right.isPressed || this.joystickState === 'right' ? -1 : 0;
+    const nx =
+      this.actions.left.isPressed || this.joystickState === 'left' ? 1 : 0;
+    const pz = this.actions.up.isPressed || this.joystickState === 'up' ? 1 : 0;
+    const nz =
+      this.actions.down.isPressed || this.joystickState === 'down' ? -1 : 0;
+    return new THREE.Vector3(px + nx, 0, pz + nz).normalize();
   }
 
   /**
