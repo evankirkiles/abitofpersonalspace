@@ -124,6 +124,7 @@ export class InputManager implements IUpdatable {
       this.nippleManager = nipplejs.create({
         zone: this.nippleDomElement,
         mode: 'static',
+        dynamicPage: true,
       });
       this.nippleManager.on('dir', this.boundOnNippleMove);
       this.nippleManager.on('end', this.boundOnNippleMove);
