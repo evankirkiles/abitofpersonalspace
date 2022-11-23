@@ -84,6 +84,7 @@ export class World {
     worldScenePath?: string,
     callbacks: {
       onDownloadStart?: () => void;
+      onDownloadProgress?: (p: number, d: number, t: number) => void;
       onDownloadFinish?: () => void;
     } = {}
   ) {
@@ -142,7 +143,7 @@ export class World {
     this.inputManager = new InputManager(this, this.target);
     this.loadingManager = new LoadingManager(this, {
       onStart: callbacks.onDownloadStart,
-      // onProgress: (p) => console.log(p),
+      onProgress: callbacks.onDownloadProgress,
       onFinished: callbacks.onDownloadFinish,
     });
 

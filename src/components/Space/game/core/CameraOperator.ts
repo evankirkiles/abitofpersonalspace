@@ -67,7 +67,7 @@ export class CameraOperator
     // offset state
     this.freeTarget = new THREE.Object3D();
     this.movementSpeed = 0.06;
-    this.restThreshold = 0.01;
+    this.restThreshold = 0.1;
 
     // create actions
     this.actions = {

@@ -19,7 +19,11 @@ export class LoadingManager {
   // statefuls
   public firstLoad: boolean = true;
   public onStart?: () => void;
-  public onProgress?: (progress: number) => void;
+  public onProgress?: (
+    progress: number,
+    downloaded: number,
+    total: number
+  ) => void;
   public onFinished?: () => void;
 
   private world: World;
@@ -34,7 +38,11 @@ export class LoadingManager {
     world: World,
     callbacks: {
       onStart?: () => void;
-      onProgress?: (progress: number) => void;
+      onProgress?: (
+        progress: number,
+        downloaded: number,
+        total: number
+      ) => void;
       onFinished?: () => void;
     } = {}
   ) {
@@ -72,7 +80,8 @@ export class LoadingManager {
           if (xhr.lengthComputable) {
             trackerEntry.total = xhr.total; // set the total for relative sizes
             trackerEntry.progress = xhr.loaded / xhr.total;
-            this.onProgress && this.onProgress(this.getLoadingPercentage());
+            const [percentage, downloaded, total] = this.getLoadingPercentage();
+            this.onProgress && this.onProgress(percentage, downloaded, total);
           }
         },
         (error) => {
@@ -92,6 +101,7 @@ export class LoadingManager {
    */
   public addLoadingEntry(path: string): LoadingTrackerEntry {
     const entry = new LoadingTrackerEntry(path);
+    entry.finished = false;
     this.loadingTracker.push(entry);
     return entry;
   }
@@ -125,7 +135,7 @@ export class LoadingManager {
    * Check on the total load status of all loading elements
    * @returns A number from 0-1 telling how much has loaded
    */
-  public getLoadingPercentage(): number {
+  public getLoadingPercentage(): [number, number, number] {
     let done = true;
     let total = 0;
     let finished = 0;
@@ -137,7 +147,7 @@ export class LoadingManager {
         this.loadingTracker[i].progress * this.loadingTracker[i].total;
       if (!this.loadingTracker[i].finished) done = false;
     }
-    if (total === 0) return 0;
-    return finished / total;
+    if (total === 0) return [0, 0, 0];
+    return [finished / total, finished, total];
   }
 }

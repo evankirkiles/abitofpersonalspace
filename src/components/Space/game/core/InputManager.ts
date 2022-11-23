@@ -56,8 +56,7 @@ export class InputManager implements IUpdatable {
     this.isTouchScreen =
       'ontouchstart' in window ||
       navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0 ||
-      true;
+      (navigator as any).msMaxTouchPoints > 0;
     this.nippleDomElement = document.createElement('div');
     this.nippleDomElement.style.position = 'absolute';
     this.nippleDomElement.style.bottom = '0px';

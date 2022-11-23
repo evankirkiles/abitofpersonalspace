@@ -26,6 +26,17 @@
   }
 }
 
+@keyframes fadeup {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0px);
+  }
+}
+
 .loading_container {
   grid-area: loading;
   place-self: center center;
@@ -39,6 +50,7 @@
   align-items: center;
   gap: 5px;
   z-index: 1;
+  animation: fadeup 0.5s ease-in-out;
 }
 
 .loading_bar {
@@ -46,4 +58,32 @@
   height: 20px;
   border: 1px solid $foreground;
   background-color: $background;
+}
+
+.loading_percentage {
+  width: 100%;
+  height: 100%;
+  background-color: $foreground;
+  transition: transform 0.1s ease-in-out;
+  transform-origin: 0% 50%;
+  transform: scaleX(0);
+}
+
+.loading_numbers {
+  display: grid;
+  width: 150px;
+  grid-template: 'd bar t' 30px / 1fr min-content 1fr;
+  font-size: 11px;
+  margin-top: 5px;
+  opacity: 0.6;
+  gap: 5px;
+  font-family: monospace;
+}
+
+.loading_numbers_downloaded {
+  text-align: right;
+}
+
+.loading_numbers_total {
+  text-align: left;
 }
