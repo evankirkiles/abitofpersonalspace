@@ -13,7 +13,6 @@ import _ from 'lodash';
 import * as THREE from 'three';
 import { computeBoundsTree, disposeBoundsTree } from 'three-mesh-bvh';
 import { GLTF } from 'three-stdlib';
-import CameraController from 'camera-controls';
 import { CameraOperator } from '../core/CameraOperator';
 import * as Utils from '../core/FunctionLibrary';
 import { InputManager } from '../core/InputManager';
@@ -28,13 +27,11 @@ import { Scenario } from './Scenario';
 // Add the extension functions
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
-// initialize camera controller
-CameraController.install({ THREE });
 export class World {
   // game properties
   public renderer: THREE.WebGLRenderer;
   public camera: THREE.PerspectiveCamera;
-  public cameraController: CameraController;
+  public cameraOperator: CameraOperator;
 
   // world assets
   public graphicsWorld: THREE.Scene;
@@ -63,7 +60,6 @@ export class World {
 
   // custom elements
   public inputManager: InputManager;
-  public cameraOperator: CameraOperator;
   public loadingManager: LoadingManager;
 
   // scenarios
@@ -114,12 +110,13 @@ export class World {
     this.graphicsWorld = new THREE.Scene();
     const { width, height } = target.getBoundingClientRect();
     this.camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1010);
-    this.cameraController = new CameraController(
+    this.cameraOperator = new CameraOperator(
+      this,
       this.camera,
       this.renderer.domElement
     );
-    this.cameraController.minDistance = 1;
-    this.cameraController.maxDistance = 20;
+    this.cameraOperator.minDistance = 1;
+    this.cameraOperator.maxDistance = 20;
     onWindowResize();
 
     // physics
@@ -143,7 +140,6 @@ export class World {
 
     // initialization
     this.inputManager = new InputManager(this, this.target);
-    this.cameraOperator = new CameraOperator(this, this.camera, 1);
     this.loadingManager = new LoadingManager(this, {
       onStart: callbacks.onDownloadStart,
       // onProgress: (p) => console.log(p),
@@ -232,7 +228,7 @@ export class World {
       entity.update(timeStep, unscaledTimeStep);
     });
     // update camera
-    this.cameraController.update(timeStep);
+    this.cameraOperator.update2(timeStep);
 
     // Lerp time scale
     this.timeScale = THREE.MathUtils.lerp(

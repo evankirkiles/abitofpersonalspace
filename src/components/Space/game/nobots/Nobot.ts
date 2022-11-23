@@ -115,7 +115,8 @@ export class Nobot
 
   // action map
   public actions: { [key: string]: KeyBinding };
-  public joystickState: 'end' | 'left' | 'right' | 'down' | 'up' = 'end';
+  public joystickActive: boolean = false;
+  public joystickAngle: number = 0;
 
   /* -------------------------------------------------------------------------- */
   /*                               INITIALIZATION                               */
@@ -727,14 +728,23 @@ export class Nobot
     code: string,
     pressed: boolean
   ): void {
-    Object.keys(this.actions).forEach((action) => {
-      if (Object.prototype.hasOwnProperty.call(this.actions, action)) {
-        const binding = this.actions[action];
-        if (_.includes(binding.eventCodes, code)) {
-          this.triggerAction(action, pressed);
-        }
+    if (this.controlledObject !== undefined) {
+      this.controlledObject.handleKeyboardEvent(event, code, pressed);
+    } else {
+      if (code === 'KeyC' && pressed && this.world) {
+        this.world.cameraOperator.nobotCaller = this;
+        this.world.inputManager.setInputReceiver(this.world.cameraOperator);
+      } else {
+        Object.keys(this.actions).forEach((action) => {
+          if (Object.prototype.hasOwnProperty.call(this.actions, action)) {
+            const binding = this.actions[action];
+            if (_.includes(binding.eventCodes, code)) {
+              this.triggerAction(action, pressed);
+            }
+          }
+        });
       }
-    });
+    }
   }
 
   /**
@@ -742,8 +752,9 @@ export class Nobot
    * @param event The nipple event passed from an InputManager
    * @param data The state of the joystick
    */
-  public handleNippleEvent(state: string): void {
-    this.joystickState = state as any;
+  public handleNippleEvent(active: boolean, angle: number): void {
+    this.joystickActive = active;
+    this.joystickAngle = angle;
     this.nobotState.onInputChange();
   }
 
@@ -762,8 +773,9 @@ export class Nobot
       return;
     }
     // otherwise, make the camera follow this (MIGHT NEED TUNING)
-    this.world.cameraOperator.setRadius(1.6, true);
-    this.world.cameraOperator.followMode = false;
+    // this.world.cameraOperator.setRadius(1.6, true);
+    this.world.cameraOperator.followMode = true;
+    this.world.cameraOperator.target = this;
   }
 
   /**
@@ -782,7 +794,7 @@ export class Nobot
       );
       const v = new THREE.Vector3();
       this.getWorldPosition(v);
-      this.world.cameraController.setTarget(v.x, v.y, v.z);
+      // this.world.cameraController.setTarget(v.x, v.y, v.z);
       // this.getWorldPosition(this.world.cameraController.target);
     }
   }
@@ -796,13 +808,12 @@ export class Nobot
    * @returns
    */
   public getLocalMovementDirection(): THREE.Vector3 {
-    const px =
-      this.actions.right.isPressed || this.joystickState === 'right' ? -1 : 0;
-    const nx =
-      this.actions.left.isPressed || this.joystickState === 'left' ? 1 : 0;
-    const pz = this.actions.up.isPressed || this.joystickState === 'up' ? 1 : 0;
-    const nz =
-      this.actions.down.isPressed || this.joystickState === 'down' ? -1 : 0;
+    let px = this.actions.right.isPressed ? -1 : 0;
+    const nx = this.actions.left.isPressed ? 1 : 0;
+    let pz = this.actions.up.isPressed ? 1 : 0;
+    const nz = this.actions.down.isPressed ? -1 : 0;
+    px += Number(this.joystickActive) * -Math.cos(this.joystickAngle);
+    pz += Number(this.joystickActive) * Math.sin(this.joystickAngle);
     return new THREE.Vector3(px + nx, 0, pz + nz).normalize();
   }
 

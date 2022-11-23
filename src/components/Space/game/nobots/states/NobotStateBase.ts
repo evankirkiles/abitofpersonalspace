@@ -74,7 +74,7 @@ export abstract class NobotStateBase implements INobotState {
    */
   public anyDirection(): boolean {
     return (
-      this.nobot.joystickState !== 'end' ||
+      this.nobot.joystickActive ||
       this.nobot.actions.up.isPressed ||
       this.nobot.actions.down.isPressed ||
       this.nobot.actions.left.isPressed ||

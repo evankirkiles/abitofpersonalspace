@@ -74,8 +74,8 @@ export class Scenario {
     if (!this.spawnAlways) {
       const theta = this.initialCameraAngle || 0;
       const tan_az = Math.cos(15) * Math.tan(theta);
-      world.cameraController.distance = 1;
-      world.cameraController.azimuthAngle = Math.atan(tan_az);
+      world.cameraOperator.distance = 1;
+      world.cameraOperator.azimuthAngle = Math.atan(tan_az);
     }
   }
 }

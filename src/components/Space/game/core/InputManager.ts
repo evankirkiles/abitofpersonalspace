@@ -38,6 +38,7 @@ export class InputManager implements IUpdatable {
     evt: NippleJs.EventData,
     data: NippleJs.JoystickOutputData
   ) => void;
+  public boundOnNippleStop: (evt: NippleJs.EventData) => void;
 
   // receiver of the inputs
   public inputReceiver?: IInputReceiver;
@@ -55,7 +56,8 @@ export class InputManager implements IUpdatable {
     this.isTouchScreen =
       'ontouchstart' in window ||
       navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0;
+      (navigator as any).msMaxTouchPoints > 0 ||
+      true;
     this.nippleDomElement = document.createElement('div');
     this.nippleDomElement.style.position = 'absolute';
     this.nippleDomElement.style.bottom = '0px';
@@ -74,6 +76,7 @@ export class InputManager implements IUpdatable {
     this.boundOnKeyUp = (evt) => this.onKeyUp(evt);
     //  - nipple
     this.boundOnNippleMove = (evt, data) => this.onNippleMove(evt, data);
+    this.boundOnNippleStop = (evt) => this.onNippleStop(evt);
 
     // now start listening
     this.listen();
@@ -126,8 +129,8 @@ export class InputManager implements IUpdatable {
         mode: 'static',
         dynamicPage: true,
       });
-      this.nippleManager.on('dir', this.boundOnNippleMove);
-      this.nippleManager.on('end', this.boundOnNippleMove);
+      this.nippleManager.on('end', this.boundOnNippleStop);
+      this.nippleManager.on('move', this.boundOnNippleMove);
     }
   }
 
@@ -185,10 +188,18 @@ export class InputManager implements IUpdatable {
     evt: NippleJs.EventData,
     data: NippleJs.JoystickOutputData
   ): void {
-    const nippleState = evt.type === 'end' ? 'end' : data.direction.angle;
-    if (this.inputReceiver && nippleState !== this.nippleState) {
-      this.nippleState = nippleState;
-      this.inputReceiver.handleNippleEvent(this.nippleState);
+    if (this.inputReceiver) {
+      this.inputReceiver.handleNippleEvent(true, data.angle.radian ?? 0);
+    }
+  }
+
+  /**
+   * Funnels an OnKeyDown event through to the input receiver
+   * @param event A KeyDown event
+   */
+  public onNippleStop(evt: NippleJs.EventData): void {
+    if (this.inputReceiver) {
+      this.inputReceiver.handleNippleEvent(false, 0);
     }
   }
 }

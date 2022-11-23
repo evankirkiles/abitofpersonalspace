@@ -13,7 +13,7 @@ export interface IInputReceiver {
 
   // event handlers
   handleKeyboardEvent(e: KeyboardEvent, code: string, pressed: boolean): void;
-  handleNippleEvent(state: string): void;
+  handleNippleEvent(active: boolean, angle: number): void;
 
   // initialization and updating
   inputReceiverInit(): void;

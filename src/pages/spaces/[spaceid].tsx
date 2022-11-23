@@ -52,11 +52,12 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
   // keep track of the world's object url
   const [world, setWorld] = useState<string | null>(null);
   useEffect(() => {
-    if (space) {
-      getSignedFileUrl(space.file_space.key).then((worldUrl) => {
-        setWorld(worldUrl);
-      });
-    }
+    // if (space) {
+    //   getSignedFileUrl(space.file_space.key).then((worldUrl) => {
+    //     setWorld(worldUrl);
+    //   });
+    // }
+    setWorld('/test/worlds/room.glb');
   }, [space]);
 
   return (
