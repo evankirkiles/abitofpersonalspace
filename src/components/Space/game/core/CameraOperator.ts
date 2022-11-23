@@ -76,8 +76,10 @@ export class CameraOperator
       left: new KeyBinding('KeyA'),
       right: new KeyBinding('KeyD'),
       up: new KeyBinding('KeyE'),
+      up2: new KeyBinding('Space'),
       down: new KeyBinding('KeyQ'),
-      fast: new KeyBinding('ShiftLeft'),
+      down2: new KeyBinding('ShiftLeft'),
+      fast: new KeyBinding('KeyR'),
     };
   }
 
@@ -99,47 +101,34 @@ export class CameraOperator
         this.moveTo(x, y, z, false);
         // when free, just calculate the position based on targetPos + velocity
       } else {
+        // calculate new target position
+        const speed =
+          this.movementSpeed *
+          (this.actions.fast.isPressed ? delta * 600 : delta * 120);
+        const up = Utils.getUp(this.camera);
+        const right = Utils.getRight(this.camera);
+        const forward = Utils.getBack(this.camera);
+        this.freeTarget.position.add(
+          up.multiplyScalar(speed * this.upVelocity)
+        );
+        this.freeTarget.position.add(
+          forward.multiplyScalar(speed * this.forwardVelocity)
+        );
+        this.freeTarget.position.add(
+          right.multiplyScalar(speed * this.rightVelocity)
+        );
         const x = this.freeTarget.position.x;
         const y = this.freeTarget.position.y;
         const z = this.freeTarget.position.z;
         this.moveTo(x, y, z, false);
-        // const speed =
-        //   this.movementSpeed *
-        //   (this.actions.fast.isPressed ? delta * 600 : delta * 60);
-        // const up = Utils.getUp(this.camera);
-        // const right = Utils.getRight(this.camera);
-        // const forward = Utils.getBack(this.camera);
-        // const newPosition = new THREE.Vector3();
-        // this.getPosition(newPosition);
-        // console.log(up.multiplyScalar(speed * this.upVelocity));
-        // newPosition.add(up.multiplyScalar(speed * this.upVelocity));
-        // newPosition.add(forward.multiplyScalar(speed * this.forwardVelocity));
-        // newPosition.add(right.multiplyScalar(speed * this.rightVelocity));
-        // // this.setPosition(newPosition.x, newPosition.y, newPosition.z, false);
-        // // this.camera.position.set(newPosition.x, newPosition.y, newPosition.z);
-        // const newLookAt = newPosition.clone();
-        // newLookAt.add(Utils.getBack(this.camera).multiplyScalar(1e-5));
-        // this.moveTo(newPosition.x, newPosition.y, newPosition.z, false);
-        // const newLookAt = newPosition.clone();
-        // newLookAt.add(forward.multiplyScalar(1e-2));
-        // // this.setLookAt(
-        // //   newPosition.x,
-        // //   newPosition.y,
-        // //   newPosition.z,
-        // //   newLookAt.x,
-        // //   newLookAt.y,
-        // //   newLookAt.z,
-        // //   false
-        // // );
-        // this.moveTo(newPosition.x, newPosition.y, newPosition.z);
-        // decay the velocity until below a threshold
-        // this.rightVelocity = THREE.MathUtils.lerp(this.rightVelocity, 0, 0.3);
-        // this.upVelocity = THREE.MathUtils.lerp(this.upVelocity, 0, 0.3);
-        // this.forwardVelocity = THREE.MathUtils.lerp(
-        //   this.forwardVelocity,
-        //   0,
-        //   0.3
-        // );
+        // decay the velocity of camera movement
+        this.rightVelocity = THREE.MathUtils.lerp(this.rightVelocity, 0, 0.3);
+        this.upVelocity = THREE.MathUtils.lerp(this.upVelocity, 0, 0.3);
+        this.forwardVelocity = THREE.MathUtils.lerp(
+          this.forwardVelocity,
+          0,
+          0.3
+        );
       }
     }
     // call the initial camera controls update func
@@ -192,16 +181,28 @@ export class CameraOperator
         this.azimuthRotateSpeed = 1.0;
         this.polarRotateSpeed = 1.0;
         this.transitioning = true;
-        this.moveTo(
+        // get 1-distance offset between camera and nobot
+        const newPos = this.nobotCaller.position
+          .clone()
+          .sub(Utils.getForward(this.nobotCaller).multiplyScalar(1.5))
+          .add(new THREE.Vector3(0, 1, 0));
+        // move our target back to  character
+        const nobot = this.nobotCaller;
+        this.setLookAt(
+          newPos.x,
+          newPos.y,
+          newPos.z,
           this.nobotCaller.position.x,
           this.nobotCaller.position.y,
           this.nobotCaller.position.z,
           true
         ).then(() => {
-          this.world.inputManager.setInputReceiver(this.nobotCaller!);
+          this.world.inputManager.setInputReceiver(nobot);
           this.nobotCaller = undefined;
           this.followMode = true;
           this.transitioning = false;
+          this.distance = 2;
+          this.mouseButtons.wheel = CameraControls.ACTION.DOLLY;
         });
       }
     } else {
@@ -235,24 +236,18 @@ export class CameraOperator
     this.freeTarget.position.copy(this.camera.position);
     this.target = this.freeTarget;
     this.distance = 1e-5;
-    // move a bit off
+    // move target to the freetarget
     this.moveTo(
       this.target.position.x,
       this.target.position.y,
       this.target.position.z,
       true
     );
-    // set epsilon to center
-    // this.setTarget(
-    //   this.camera.position.x,
-    //   this.camera.position.y,
-    //   this.camera.position.z,
-    //   true
-    // );
     this.minDistance = this.maxDistance = 1e-5;
-    this.azimuthRotateSpeed = -0.3;
-    this.polarRotateSpeed = -0.3;
+    this.azimuthRotateSpeed = 0.4;
+    this.polarRotateSpeed = 0.4;
     this.followMode = false;
+    this.mouseButtons.wheel = CameraControls.ACTION.ROTATE;
   }
 
   /**
@@ -262,7 +257,8 @@ export class CameraOperator
   public inputReceiverUpdate(timeStep: number): void {
     this.upVelocity = THREE.MathUtils.lerp(
       this.upVelocity,
-      +this.actions.up.isPressed - +this.actions.down.isPressed,
+      +(this.actions.up.isPressed || this.actions.up2.isPressed) -
+        +(this.actions.down.isPressed || this.actions.down2.isPressed),
       0.3
     );
     this.forwardVelocity = THREE.MathUtils.lerp(

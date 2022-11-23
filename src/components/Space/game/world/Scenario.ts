@@ -73,9 +73,9 @@ export class Scenario {
     await Promise.all(this.spawnPoints.map((sp) => sp.spawn(world)));
     if (!this.spawnAlways) {
       const theta = this.initialCameraAngle || 0;
-      const tan_az = Math.cos(15) * Math.tan(theta);
-      world.cameraOperator.distance = 1;
-      world.cameraOperator.azimuthAngle = Math.atan(tan_az);
+      world.cameraOperator.distance = 1.5;
+      world.cameraOperator.azimuthAngle = (Math.PI * theta) / 180;
+      world.cameraOperator.polarAngle = (Math.PI * 60) / 180;
     }
   }
 }
