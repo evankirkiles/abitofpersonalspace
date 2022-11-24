@@ -11,7 +11,8 @@ import { ISpawnPoint } from '../interfaces/ISpawnPoint';
 import { Nobot } from '../nobots/Nobot';
 import { World } from './World';
 
-const PLAYER_MODEL = '/assets/characters/nobot-anim.glb';
+// const PLAYER_MODEL = '/assets/characters/nobot-anim.glb';
+const PLAYER_MODEL = '/assets/characters/personspace.glb';
 // const PLAYER_MODEL = '/models/nobot.glb';
 // const PLAYER_MODEL = '/models/boxman.glb';
 

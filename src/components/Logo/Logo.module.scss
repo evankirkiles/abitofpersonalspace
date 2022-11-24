@@ -13,5 +13,7 @@
 
   & path {
     stroke: $foreground;
+    stroke-width: 3px;
+    fill: rgba(0, 0, 0, 0.6);
   }
 }
