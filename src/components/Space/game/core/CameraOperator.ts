@@ -46,6 +46,10 @@ export class CameraOperator
 
   // actions & character
   public actions: { [action: string]: KeyBinding };
+  // joystick angle + distances;
+  public joystickActive: boolean = false;
+  public joystickAngle: number = 0;
+  public vJoystickDistance: number = 0;
 
   /**
    * Constructs a CameraOperator which can be added as an updatable to the world.
@@ -222,7 +226,16 @@ export class CameraOperator
    * @param state the nipple state
    */
   public handleNippleEvent(active: boolean, angle: number): void {
-    const a = this;
+    this.joystickActive = active;
+    this.joystickAngle = angle;
+  }
+
+  /**
+   * Handle vertical input to the camera.
+   * @param state the nipple state
+   */
+  public handleVNippleEvent(active: boolean, distance: number): void {
+    this.vJoystickDistance = distance;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -257,18 +270,23 @@ export class CameraOperator
   public inputReceiverUpdate(timeStep: number): void {
     this.upVelocity = THREE.MathUtils.lerp(
       this.upVelocity,
-      +(this.actions.up.isPressed || this.actions.up2.isPressed) -
+      this.vJoystickDistance +
+        +(this.actions.up.isPressed || this.actions.up2.isPressed) -
         +(this.actions.down.isPressed || this.actions.down2.isPressed),
       0.3
     );
     this.forwardVelocity = THREE.MathUtils.lerp(
       this.forwardVelocity,
-      +this.actions.forward.isPressed - +this.actions.back.isPressed,
+      Number(this.joystickActive) * Math.sin(this.joystickAngle) +
+        +this.actions.forward.isPressed -
+        +this.actions.back.isPressed,
       0.3
     );
     this.rightVelocity = THREE.MathUtils.lerp(
       this.rightVelocity,
-      +this.actions.right.isPressed - +this.actions.left.isPressed,
+      Number(this.joystickActive) * Math.cos(this.joystickAngle) +
+        +this.actions.right.isPressed -
+        +this.actions.left.isPressed,
       0.3
     );
   }

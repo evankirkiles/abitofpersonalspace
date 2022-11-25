@@ -115,8 +115,8 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
               ) : null}
             </div>
           ) : null}
-          <div className={s.more_info}>+</div>
-          <div className={s.instructions}>?</div>
+          {/* <div className={s.more_info}>+</div>
+          <div className={s.instructions}>?</div> */}
         </div>
       </div>
     </>

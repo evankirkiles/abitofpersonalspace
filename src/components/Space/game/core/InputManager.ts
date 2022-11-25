@@ -20,8 +20,11 @@ export class InputManager implements IUpdatable {
 
   // nipple for mobile controls
   public nippleDomElement: HTMLDivElement;
+  public vNippleDomElement: HTMLDivElement;
   public nippleManager?: ReturnType<typeof nipplejs.create>;
+  public vNippleManager?: ReturnType<typeof nipplejs.create>;
   public nippleState: string = 'end';
+  public vNippleState: string = 'end';
 
   // is the device a touch screen? if so, add nipple
   public isTouchScreen: boolean = false;
@@ -34,11 +37,18 @@ export class InputManager implements IUpdatable {
   // bind listeners
   public boundOnKeyDown: (evt: KeyboardEvent) => void;
   public boundOnKeyUp: (evt: KeyboardEvent) => void;
+  // full joystick movement
   public boundOnNippleMove: (
     evt: NippleJs.EventData,
     data: NippleJs.JoystickOutputData
   ) => void;
   public boundOnNippleStop: (evt: NippleJs.EventData) => void;
+  // vertical joystick movement
+  public boundOnVNippleMove: (
+    evt: NippleJs.EventData,
+    data: NippleJs.JoystickOutputData
+  ) => void;
+  public boundOnVNippleStop: (evt: NippleJs.EventData) => void;
 
   // receiver of the inputs
   public inputReceiver?: IInputReceiver;
@@ -57,13 +67,48 @@ export class InputManager implements IUpdatable {
       'ontouchstart' in window ||
       navigator.maxTouchPoints > 0 ||
       (navigator as any).msMaxTouchPoints > 0;
+
+    // joystick nipple dom element
     this.nippleDomElement = document.createElement('div');
     this.nippleDomElement.style.position = 'absolute';
     this.nippleDomElement.style.bottom = '0px';
     this.nippleDomElement.style.right = '0px';
-    this.nippleDomElement.style.width = '85px';
-    this.nippleDomElement.style.height = '85px';
+    this.nippleDomElement.style.width = '75px';
+    this.nippleDomElement.style.height = '75px';
     this.nippleDomElement.style.zIndex = '1';
+    // joystick nipple dom label
+    const label = document.createElement('div');
+    label.style.position = 'absolute';
+    label.style.top = '-3px';
+    label.style.left = '0px';
+    label.style.transform = 'translate(50px, -50px) translate(-100%, -100%)';
+    label.style.fontSize = '12px';
+    label.style.opacity = '0.3';
+    label.style.letterSpacing = '3px';
+    // label.style.fontFamily = 'monospace';
+    label.innerText = 'MOVE';
+    this.nippleDomElement.appendChild(label);
+
+    // vertical nipple dom element
+    this.vNippleDomElement = document.createElement('div');
+    this.vNippleDomElement.style.position = 'absolute';
+    this.vNippleDomElement.style.bottom = '0px';
+    this.vNippleDomElement.style.left = '0px';
+    this.vNippleDomElement.style.width = '75px';
+    this.vNippleDomElement.style.height = '75px';
+    this.vNippleDomElement.style.zIndex = '1';
+    // vertical nipple dom label
+    const vLabel = document.createElement('div');
+    vLabel.style.position = 'absolute';
+    vLabel.style.top = '-3px';
+    vLabel.style.right = '0px';
+    vLabel.style.transform = 'translate(-50px, -50px) translate(100%, -100%)';
+    vLabel.style.fontSize = '12px';
+    vLabel.style.opacity = '0.3';
+    vLabel.style.letterSpacing = '3px';
+    // vLabel.style.fontFamily = 'monospace';
+    vLabel.innerText = 'JUMP';
+    this.vNippleDomElement.appendChild(vLabel);
 
     // nipple dom element
     if (this.isTouchScreen) {
@@ -76,6 +121,9 @@ export class InputManager implements IUpdatable {
     //  - nipple
     this.boundOnNippleMove = (evt, data) => this.onNippleMove(evt, data);
     this.boundOnNippleStop = (evt) => this.onNippleStop(evt);
+    //  - vNipple
+    this.boundOnVNippleMove = (evt, data) => this.onVNippleMove(evt, data);
+    this.boundOnVNippleStop = (evt) => this.onVNippleStop(evt);
 
     // now start listening
     this.listen();
@@ -122,14 +170,28 @@ export class InputManager implements IUpdatable {
 
     // add nipple
     if (this.isTouchScreen) {
+      // add 360º nipple
       this.domElement.append(this.nippleDomElement);
       this.nippleManager = nipplejs.create({
         zone: this.nippleDomElement,
         mode: 'static',
         dynamicPage: true,
+        shape: 'square',
       });
       this.nippleManager.on('end', this.boundOnNippleStop);
       this.nippleManager.on('move', this.boundOnNippleMove);
+      // add vertical nipple
+      this.domElement.append(this.vNippleDomElement);
+      this.vNippleManager = nipplejs.create({
+        zone: this.vNippleDomElement,
+        mode: 'static',
+        dynamicPage: true,
+        lockY: true,
+        shape: 'square',
+        position: { top: '0', right: '0', left: 'unset' },
+      });
+      this.vNippleManager.on('end', this.boundOnVNippleStop);
+      this.vNippleManager.on('move', this.boundOnVNippleMove);
     }
   }
 
@@ -147,9 +209,9 @@ export class InputManager implements IUpdatable {
     // remove nipple
     if (this.isTouchScreen) {
       this.nippleDomElement.remove();
-      if (this.nippleManager) {
-        this.nippleManager.destroy();
-      }
+      this.vNippleDomElement.remove();
+      if (this.nippleManager) this.nippleManager.destroy();
+      if (this.vNippleManager) this.vNippleManager.destroy();
     }
   }
 
@@ -199,6 +261,34 @@ export class InputManager implements IUpdatable {
   public onNippleStop(evt: NippleJs.EventData): void {
     if (this.inputReceiver) {
       this.inputReceiver.handleNippleEvent(false, 0);
+    }
+  }
+
+  /* ------------------------------- VERT NIPPLE ------------------------------ */
+
+  /**
+   * Funnels an OnKeyDown event through to the input receiver
+   * @param event A KeyDown event
+   */
+  public onVNippleMove(
+    evt: NippleJs.EventData,
+    data: NippleJs.JoystickOutputData
+  ): void {
+    if (this.inputReceiver) {
+      this.inputReceiver.handleVNippleEvent(
+        true,
+        (data.distance / 50) * data.vector.y
+      );
+    }
+  }
+
+  /**
+   * Funnels an OnKeyDown event through to the input receiver
+   * @param event A KeyDown event
+   */
+  public onVNippleStop(evt: NippleJs.EventData): void {
+    if (this.inputReceiver) {
+      this.inputReceiver.handleVNippleEvent(false, 0);
     }
   }
 }

@@ -43,7 +43,7 @@
   padding: 10px;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   grid-auto-rows: min-content;
-  gap: 10px;
+  // gap: 5px;
 
   @include respond-to('small') {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

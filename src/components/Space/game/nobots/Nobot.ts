@@ -758,6 +758,17 @@ export class Nobot
     this.nobotState.onInputChange();
   }
 
+  /**
+   * Funnels a keyboard event through to its action handler for the nobot.
+   * @param event The nipple event passed from an InputManager
+   * @param data The state of the joystick
+   */
+  public handleVNippleEvent(active: boolean, distance: number): void {
+    if (!active) this.triggerAction('jump', false);
+    else if (distance > 0.5) this.triggerAction('jump', true);
+    this.nobotState.onInputChange();
+  }
+
   /* -------------------------------------------------------------------------- */
   /*                               INPUT RECEIVING                              */
   /* -------------------------------------------------------------------------- */

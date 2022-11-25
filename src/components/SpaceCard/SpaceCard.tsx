@@ -25,14 +25,14 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
       }`}
     >
       <div className={s.img_preview}>
-        <Image src={DOOR} className={s.door_image} alt={'a door'} />
+        {/* <Image src={DOOR} className={s.door_image} alt={'a door'} /> */}
       </div>
       <Link href={`/spaces/${space.id}`}>
         <div className={s.shadow_overlay}></div>
       </Link>
       <Link href={`/spaces/${space.id}`}>
         <div className={s.img_container}>
-          <OptimizedImage
+          {/* <OptimizedImage
             src={space.file_door?.object.key}
             className={s.door_image}
             alt={'a door'}
@@ -41,7 +41,7 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
             (max-width: 1500px) 200px,
             300px 
             `}
-          />
+          /> */}
           {/* <Image src={DOOR} className={s.door_image} alt={'a door'} /> */}
           <div className={s.meta_info}>
             {space.location ? (
