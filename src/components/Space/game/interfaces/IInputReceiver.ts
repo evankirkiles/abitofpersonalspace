@@ -15,6 +15,7 @@ export interface IInputReceiver {
   handleKeyboardEvent(e: KeyboardEvent, code: string, pressed: boolean): void;
   handleNippleEvent(active: boolean, angle: number): void;
   handleVNippleEvent(active: boolean, distance: number): void;
+  handleButtonEvent(): boolean;
 
   // initialization and updating
   inputReceiverInit(): void;

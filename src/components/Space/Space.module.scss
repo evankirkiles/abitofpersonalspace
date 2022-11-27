@@ -98,3 +98,40 @@
 .loading_numbers_total {
   text-align: left;
 }
+
+@keyframes fadedown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px);
+  }
+}
+
+.view_button {
+  position: absolute;
+  left: 50%;
+  bottom: 25px;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid $foreground;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  transform-origin: 50% 50%;
+  opacity: 0.5;
+  animation: fadedown 0.5s ease-in-out;
+
+  &:hover {
+    transform: translateX(-50%) scale(1.1);
+    opacity: 1;
+  }
+}

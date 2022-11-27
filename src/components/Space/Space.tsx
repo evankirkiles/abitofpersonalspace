@@ -7,6 +7,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as APIt from '../../supabase/types';
 import { World } from './game/world/World';
+import { AiOutlineCamera, AiOutlineUser } from 'react-icons/ai';
 import s from './Space.module.scss';
 
 type SpaceProps = {
@@ -29,9 +30,11 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
   const loadingRef = useRef<HTMLDivElement>(null);
   const loadingDRef = useRef<HTMLDivElement>(null);
   const loadingTRef = useRef<HTMLDivElement>(null);
+  const viewToggleRef = useRef<HTMLDivElement>(null);
 
   // loading state
   const [isLoading, setIsLoading] = useState(true);
+  const [camView, setCamView] = useState(false);
 
   // initialize the world immediately
   useEffect(() => {
@@ -71,6 +74,28 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
           </div>
         </div>
       ) : null}
+      <div
+        className={s.view_button}
+        ref={viewToggleRef}
+        style={{
+          display:
+            'ontouchstart' in window ||
+            navigator.maxTouchPoints > 0 ||
+            (navigator as any).msMaxTouchPoints > 0
+              ? 'flex'
+              : 'none',
+        }}
+        onMouseDown={() => {
+          if (
+            worldRef.current &&
+            worldRef.current.inputManager.onButtonPress()
+          ) {
+            setCamView(!camView);
+          }
+        }}
+      >
+        {camView ? <AiOutlineCamera /> : <AiOutlineUser />}
+      </div>
     </div>
   );
 };

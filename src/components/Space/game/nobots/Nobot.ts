@@ -765,8 +765,22 @@ export class Nobot
    */
   public handleVNippleEvent(active: boolean, distance: number): void {
     if (!active) this.triggerAction('jump', false);
-    else if (distance > 0.5) this.triggerAction('jump', true);
+    else this.triggerAction('jump', true);
     this.nobotState.onInputChange();
+  }
+
+  /**
+   * Funnels a button event through to its action handler for the nobot.
+   * @param event The nipple event passed from an InputManager
+   * @param data The state of the joystick
+   */
+  public handleButtonEvent(): boolean {
+    if (this.world) {
+      this.world.cameraOperator.nobotCaller = this;
+      this.world.inputManager.setInputReceiver(this.world.cameraOperator);
+      return true;
+    }
+    return false;
   }
 
   /* -------------------------------------------------------------------------- */

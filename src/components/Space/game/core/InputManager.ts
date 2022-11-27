@@ -77,17 +77,17 @@ export class InputManager implements IUpdatable {
     this.nippleDomElement.style.height = '75px';
     this.nippleDomElement.style.zIndex = '1';
     // joystick nipple dom label
-    const label = document.createElement('div');
-    label.style.position = 'absolute';
-    label.style.top = '-3px';
-    label.style.left = '0px';
-    label.style.transform = 'translate(50px, -50px) translate(-100%, -100%)';
-    label.style.fontSize = '12px';
-    label.style.opacity = '0.3';
-    label.style.letterSpacing = '3px';
-    // label.style.fontFamily = 'monospace';
-    label.innerText = 'MOVE';
-    this.nippleDomElement.appendChild(label);
+    // const label = document.createElement('div');
+    // label.style.position = 'absolute';
+    // label.style.top = '-3px';
+    // label.style.left = '0px';
+    // label.style.transform = 'translate(50px, -50px) translate(-100%, -100%)';
+    // label.style.fontSize = '12px';
+    // label.style.opacity = '0.3';
+    // label.style.letterSpacing = '3px';
+    // // label.style.fontFamily = 'monospace';
+    // label.innerText = 'MOVE';
+    // this.nippleDomElement.appendChild(label);
 
     // vertical nipple dom element
     this.vNippleDomElement = document.createElement('div');
@@ -98,17 +98,17 @@ export class InputManager implements IUpdatable {
     this.vNippleDomElement.style.height = '75px';
     this.vNippleDomElement.style.zIndex = '1';
     // vertical nipple dom label
-    const vLabel = document.createElement('div');
-    vLabel.style.position = 'absolute';
-    vLabel.style.top = '-3px';
-    vLabel.style.right = '0px';
-    vLabel.style.transform = 'translate(-50px, -50px) translate(100%, -100%)';
-    vLabel.style.fontSize = '12px';
-    vLabel.style.opacity = '0.3';
-    vLabel.style.letterSpacing = '3px';
-    // vLabel.style.fontFamily = 'monospace';
-    vLabel.innerText = 'JUMP';
-    this.vNippleDomElement.appendChild(vLabel);
+    // const vLabel = document.createElement('div');
+    // vLabel.style.position = 'absolute';
+    // vLabel.style.top = '-3px';
+    // vLabel.style.right = '0px';
+    // vLabel.style.transform = 'translate(-50px, -50px) translate(100%, -100%)';
+    // vLabel.style.fontSize = '12px';
+    // vLabel.style.opacity = '0.3';
+    // vLabel.style.letterSpacing = '3px';
+    // // vLabel.style.fontFamily = 'monospace';
+    // vLabel.innerText = 'JUMP';
+    // this.vNippleDomElement.appendChild(vLabel);
 
     // nipple dom element
     if (this.isTouchScreen) {
@@ -176,7 +176,7 @@ export class InputManager implements IUpdatable {
         zone: this.nippleDomElement,
         mode: 'static',
         dynamicPage: true,
-        shape: 'square',
+        shape: 'circle',
       });
       this.nippleManager.on('end', this.boundOnNippleStop);
       this.nippleManager.on('move', this.boundOnNippleMove);
@@ -187,7 +187,7 @@ export class InputManager implements IUpdatable {
         mode: 'static',
         dynamicPage: true,
         lockY: true,
-        shape: 'square',
+        shape: 'circle',
         position: { top: '0', right: '0', left: 'unset' },
       });
       this.vNippleManager.on('end', this.boundOnVNippleStop);
@@ -290,5 +290,14 @@ export class InputManager implements IUpdatable {
     if (this.inputReceiver) {
       this.inputReceiver.handleVNippleEvent(false, 0);
     }
+  }
+
+  /* --------------------------------- BUTTON --------------------------------- */
+
+  /**
+   * Funnels a Button click event throuhg to the input receiver
+   */
+  public onButtonPress(): boolean {
+    return !!this.inputReceiver?.handleButtonEvent();
   }
 }

@@ -95,26 +95,24 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
           <div className={s.logo}>
             <Logo />
           </div>
-          {space ? (
-            <div className={s.credits}>
-              {space.author ? (
-                <>
-                  SPACE OF
-                  <br />
-                  {space.author}
-                  <br />
-                </>
-              ) : null}
-              {getSeasonString(new Date(space.created_at)).toLowerCase()}
-              <br />
-              {space.location ? (
-                <>
-                  {space.location}
-                  <br />
-                </>
-              ) : null}
-            </div>
-          ) : null}
+          <div className={s.credits}>
+            SPACE OF
+            <br />
+            {space ? space.author ?? 'anonymous' : null}
+            <br />
+            {space?.created_at ? (
+              <>
+                {getSeasonString(new Date(space.created_at)).toLowerCase()}
+                <br />
+              </>
+            ) : null}
+            {space?.location ? (
+              <>
+                {space.location}
+                <br />
+              </>
+            ) : null}
+          </div>
           {/* <div className={s.more_info}>+</div>
           <div className={s.instructions}>?</div> */}
         </div>

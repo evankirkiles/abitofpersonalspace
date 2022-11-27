@@ -178,37 +178,7 @@ export class CameraOperator
     pressed: boolean
   ): void {
     if (code === 'KeyC' && pressed) {
-      if (this.nobotCaller !== undefined) {
-        // reset our things back to defaults
-        this.minDistance = 1;
-        this.maxDistance = 20;
-        this.azimuthRotateSpeed = 1.0;
-        this.polarRotateSpeed = 1.0;
-        this.transitioning = true;
-        // get 1-distance offset between camera and nobot
-        const newPos = this.nobotCaller.position
-          .clone()
-          .sub(Utils.getForward(this.nobotCaller).multiplyScalar(1.5))
-          .add(new THREE.Vector3(0, 1, 0));
-        // move our target back to  character
-        const nobot = this.nobotCaller;
-        this.setLookAt(
-          newPos.x,
-          newPos.y,
-          newPos.z,
-          this.nobotCaller.position.x,
-          this.nobotCaller.position.y,
-          this.nobotCaller.position.z,
-          true
-        ).then(() => {
-          this.world.inputManager.setInputReceiver(nobot);
-          this.nobotCaller = undefined;
-          this.followMode = true;
-          this.transitioning = false;
-          this.distance = 2;
-          this.mouseButtons.wheel = CameraControls.ACTION.DOLLY;
-        });
-      }
+      this.followNobot();
     } else {
       for (const action in this.actions) {
         if (this.actions.hasOwnProperty(action)) {
@@ -236,6 +206,15 @@ export class CameraOperator
    */
   public handleVNippleEvent(active: boolean, distance: number): void {
     this.vJoystickDistance = distance;
+  }
+
+  /**
+   * Handle button input to the camera
+   * @param button
+   */
+  public handleButtonEvent(): boolean {
+    this.followNobot();
+    return true;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -289,5 +268,46 @@ export class CameraOperator
         +this.actions.left.isPressed,
       0.3
     );
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   HELPERS                                  */
+  /* -------------------------------------------------------------------------- */
+
+  /**
+   * Moves the focus of the camera back to the nobot.
+   */
+  private followNobot() {
+    if (this.nobotCaller !== undefined) {
+      // reset our things back to defaults
+      this.minDistance = 1;
+      this.maxDistance = 20;
+      this.azimuthRotateSpeed = 1.0;
+      this.polarRotateSpeed = 1.0;
+      this.transitioning = true;
+      // get 1-distance offset between camera and nobot
+      const newPos = this.nobotCaller.position
+        .clone()
+        .sub(Utils.getForward(this.nobotCaller).multiplyScalar(1.5))
+        .add(new THREE.Vector3(0, 1, 0));
+      // move our target back to  character
+      const nobot = this.nobotCaller;
+      this.setLookAt(
+        newPos.x,
+        newPos.y,
+        newPos.z,
+        this.nobotCaller.position.x,
+        this.nobotCaller.position.y,
+        this.nobotCaller.position.z,
+        true
+      ).then(() => {
+        this.world.inputManager.setInputReceiver(nobot);
+        this.nobotCaller = undefined;
+        this.followMode = true;
+        this.transitioning = false;
+        this.distance = 2;
+        this.mouseButtons.wheel = CameraControls.ACTION.DOLLY;
+      });
+    }
   }
 }
