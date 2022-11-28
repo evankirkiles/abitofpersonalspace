@@ -17,6 +17,7 @@ import getImageDimensions from '../../util/getImageDimensions';
 import * as APIt from '../../supabase/types';
 import { insertSpacePrivate } from '../../supabase/api/spaces_private';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const SubmitForm: React.FC = function () {
   // use router for redirecting to space page when finished
@@ -125,10 +126,13 @@ const SubmitForm: React.FC = function () {
       <h1 className={s.title}>submit your space.</h1>
       <p className={s.subtext}>
         if you would like to contribute your own personal space to the project,
-        follow the instructions here to create a scan. upon submission, i will
-        create collision boxes for your space and mark it as verified as soon as
-        i can, allowing your space to be explored and engaged with by the
-        audience.
+        follow the{' '}
+        <Link href="/guide" target="_blank" rel="noopener noreferrer">
+          submission guide
+        </Link>{' '}
+        to create a scan. upon submission, i will create collision boxes for
+        your space and mark it as verified as soon as i can, allowing your space
+        to be explored and engaged with by the audience.
       </p>
       <form
         className={s.form_container}
@@ -147,7 +151,7 @@ const SubmitForm: React.FC = function () {
               accept={'image/*'}
               required
             >
-              <div className={`${s.file_type} ${s.required}`}>DOOR</div>
+              <div className={`${s.file_type} ${s.required}`}>PREVIEW</div>
               <div className={s.file_accepts}>.png, .jpg...</div>
             </FileUpload>
           </div>

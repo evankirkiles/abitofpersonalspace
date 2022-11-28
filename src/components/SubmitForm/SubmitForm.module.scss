@@ -26,6 +26,15 @@
 .subtext {
   display: inline-block;
   font-family: Helvetica Neue;
+
+  & a {
+    text-decoration: underline;
+    transition: color 0.1s ease-in-out;
+    font-family: monospace;
+    &:hover {
+      color: $highlight;
+    }
+  }
 }
 
 .upload_row {

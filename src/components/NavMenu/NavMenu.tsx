@@ -44,7 +44,7 @@ const NavMenu: React.FC<NavMenuProps> = function NavMenu({
               <NavLink href="/submit">→&nbsp;submit</NavLink>
               <NavLink href="/guide">→&nbsp;guide</NavLink>
               <NavLink href="/about">→&nbsp;about</NavLink>
-              <NavLink href="/credits">→&nbsp;credits</NavLink>
+              {/* <NavLink href="/credits">→&nbsp;credits</NavLink> */}
             </div>
             <div className={s.nav_column_2}>
               <div>Socials:</div>

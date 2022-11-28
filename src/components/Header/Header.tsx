@@ -29,7 +29,7 @@ const Header: React.FC = function Header() {
             <NavLink href="/submit">submit</NavLink>
             <NavLink href="/guide">guide</NavLink>
             <NavLink href="/about">about</NavLink>
-            <NavLink href="/credits">credits</NavLink>
+            {/* <NavLink href="/credits">credits</NavLink> */}
           </div>
           <div className={s.menu} onClick={() => setNavOpen(!navOpen)}>
             <div className={s.menu_text}>{navOpen ? 'CLOSE' : 'MENU'}</div>

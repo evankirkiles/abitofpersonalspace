@@ -52,6 +52,7 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
               <div className={s.author}>{space.author}</div>
             ) : null}
           </div>
+          <div className={s.door_handle}></div>
         </div>
       </Link>
 
