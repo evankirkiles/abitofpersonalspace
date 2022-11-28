@@ -9,8 +9,9 @@ import s from './SpaceCard.module.scss';
 import Image from 'next/future/image';
 import DOOR from '../../../public/test/door.png';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSignedFileUrl } from '../../util/s3client';
+import { CSSTransition } from 'react-transition-group';
 import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 type SpaceCardProps = {
@@ -18,6 +19,9 @@ type SpaceCardProps = {
 };
 
 const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
+  const enterEffectRef = useRef<HTMLDivElement>(null);
+  const [enter, setIsEntered] = useState(false);
+
   return (
     <div
       className={`${s.container} ${
@@ -28,7 +32,10 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
         {/* <Image src={DOOR} className={s.door_image} alt={'a door'} /> */}
       </div>
       <Link href={`/spaces/${space.id}`}>
-        <div className={s.shadow_overlay}></div>
+        <div
+          className={s.shadow_overlay}
+          onClick={() => setIsEntered(true)}
+        ></div>
       </Link>
       <div className={s.img_container}>
         <OptimizedImage
@@ -54,6 +61,59 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
       <div className={s.created_at}>
         {new Date(space.created_at).toDateString()}
       </div>
+      <CSSTransition
+        in={enter}
+        timeout={3000}
+        nodeRef={enterEffectRef}
+        mountOnEnter
+      >
+        <div className={s.enter_effect} ref={enterEffectRef}>
+          <div
+            className={s.enter_effect_filler}
+            style={{ gridArea: 'b0' }}
+          ></div>
+          <div
+            className={s.enter_effect_filler}
+            style={{ gridArea: 'b1' }}
+          ></div>
+          <svg
+            role="none"
+            viewBox="0 0 1000 1000"
+            className={s.enter_effect_center}
+          >
+            <defs>
+              <radialGradient id="maskGradient">
+                <stop offset="10%" stop-color="black" />
+                <stop offset="95%" stop-color="white" />
+              </radialGradient>
+            </defs>
+            <mask
+              id="masking"
+              maskUnits="objectBoundingBox"
+              maskContentUnits="objectBoundingBox"
+            >
+              <rect x="0" y="0" width="1" height="1" fill="white" />
+              <circle cx=".5" cy=".5" r=".3" fill="url('#maskGradient')" />
+            </mask>
+            <rect
+              x="0"
+              y="0"
+              width="1000"
+              height="1000"
+              fill="black"
+              mask="url('#masking')"
+            />
+          </svg>
+          <div
+            className={s.enter_effect_filler}
+            style={{ gridArea: 'b2' }}
+          ></div>
+          <div
+            className={s.enter_effect_filler}
+            style={{ gridArea: 'b3' }}
+          ></div>
+        </div>
+      </CSSTransition>
     </div>
   );
 };

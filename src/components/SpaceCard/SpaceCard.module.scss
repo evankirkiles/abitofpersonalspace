@@ -165,3 +165,81 @@ $img_padding_inner: 20px;
   height: 30px;
   background-color: $background;
 }
+
+@keyframes circlein {
+  0% {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) perspective(3000px)
+      translate3D(0, 0, 3000px);
+  }
+
+  20% {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) perspective(3000px)
+      translate3D(0, 0, 2700px);
+  }
+
+  60% {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) perspective(3000px)
+      translate3D(0, 0, 2700px);
+  }
+
+  80% {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) perspective(3000px)
+      translate3D(0, 0, 1000px);
+    background-color: $background;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) perspective(3000px)
+      translate3D(0, 0, 1000px);
+    background-color: $background;
+  }
+}
+
+.enter_effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200vw;
+  height: 200vh;
+  z-index: 10000;
+  transform: translate(-50%, -50%) perspective(3000px) translate3D(0, 0, 1000px);
+  display: grid;
+  grid-template:
+    'b0 b0 b0' 1fr
+    'b1 h b2' min-content
+    'b3 b3 b3' 1fr / 1fr min-content 1fr;
+  pointer-events: none;
+  animation-fill-mode: both;
+  background-color: $background;
+  pointer-events: all;
+
+  &[class~='enter'] {
+    animation: circlein 3s ease-in-out;
+  }
+
+  &[class~='enter-done'] {
+    animation: circlein 3s ease-in-out;
+  }
+}
+
+.enter_effect_center {
+  width: 100px;
+  height: 100px;
+  grid-area: h;
+  transform: scale(1.02);
+}
+
+.enter_effect_filler {
+  background-color: $background;
+  width: 100%;
+  height: 100%;
+}
