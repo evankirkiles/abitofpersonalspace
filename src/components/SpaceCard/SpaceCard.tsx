@@ -30,32 +30,27 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
       <Link href={`/spaces/${space.id}`}>
         <div className={s.shadow_overlay}></div>
       </Link>
-      <Link href={`/spaces/${space.id}`}>
-        <div className={s.img_container}>
-          {/* <OptimizedImage
-            src={space.file_door?.object.key}
-            className={s.door_image}
-            alt={'a door'}
-            sizes={`
+      <div className={s.img_container}>
+        <OptimizedImage
+          src={space.file_door?.object.key}
+          className={s.door_image}
+          alt={'a door'}
+          sizes={`
             (max-width: 767px) 150px,
             (max-width: 1500px) 200px,
             300px 
             `}
-          /> */}
-          {/* <Image src={DOOR} className={s.door_image} alt={'a door'} /> */}
-          <div className={s.meta_info}>
-            {space.location ? (
-              <div className={s.location}>{space.location}</div>
-            ) : null}
-            <div className={s.title}>{space.title}</div>
-            {space.author ? (
-              <div className={s.author}>{space.author}</div>
-            ) : null}
-          </div>
-          <div className={s.door_handle}></div>
+        />
+        {/* <Image src={DOOR} className={s.door_image} alt={'a door'} /> */}
+        <div className={s.meta_info}>
+          {space.location ? (
+            <div className={s.location}>{space.location}</div>
+          ) : null}
+          <div className={s.title}>{space.title}</div>
+          {space.author ? <div className={s.author}>{space.author}</div> : null}
         </div>
-      </Link>
-
+        <div className={s.door_handle}></div>
+      </div>
       <div className={s.created_at}>
         {new Date(space.created_at).toDateString()}
       </div>

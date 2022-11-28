@@ -54,7 +54,8 @@ const GuidePage: NextPage = function SubmitPage() {
           <p>
             you may also attempt to use Polycam with the photo scanning mode,
             available on any platform which the Polycam app allows. however,
-            your mileage may vary, and the LiDAR version is heavily recommended.
+            your mileage may vary, and all of the scans currently on the website
+            were done with LiDAR.
           </p>
           <h2 className={s.section_title}>1) scan your space</h2>
           <p>

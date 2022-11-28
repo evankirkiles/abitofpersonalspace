@@ -73,3 +73,11 @@ export const getSignedFileUrl = async (key: string): Promise<string> => {
   });
   return getSignedUrl(s3client, command, { expiresIn: 3600 });
 };
+
+/**
+ * Gets a normal URL for a public object in an S3 bucket.
+ * @param key
+ */
+export const getFileUrl = (key: string) => {
+  return `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.amazonaws.com/${key}`;
+};

@@ -112,6 +112,7 @@ $img_padding: 20px;
   transform: translate3D(0, 0, 0);
   border: 1px solid white;
   background-color: black;
+  pointer-events: none;
 }
 
 $img_padding_inner: 20px;
@@ -125,6 +126,7 @@ $img_padding_inner: 20px;
   // display: none;
   box-shadow: inset 0px 0px 20px 25px rgba(0, 0, 0, 1);
   border: 1px solid #202020;
+  cursor: pointer;
 }
 
 .img_preview {
@@ -161,4 +163,5 @@ $img_padding_inner: 20px;
   border-radius: 50%;
   width: 30px;
   height: 30px;
+  background-color: $background;
 }

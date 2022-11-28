@@ -17,7 +17,7 @@ import Logo from '../../components/Logo/Logo';
 import Link from 'next/link';
 import getSeasonString from '../../util/getSeasonString';
 import { useEffect, useRef, useState } from 'react';
-import { getSignedFileUrl } from '../../util/s3client';
+import { getFileUrl, getSignedFileUrl } from '../../util/s3client';
 import Space from '../../components/Space/Space';
 import { BiBook, BiQuestionMark } from 'react-icons/bi';
 import Modal from '../../modals/Modal';
@@ -65,11 +65,11 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
   const [world, setWorld] = useState<string | null>(null);
   useEffect(() => {
     if (space) {
-      getSignedFileUrl(space.file_space.key).then((worldUrl) => {
-        setWorld(worldUrl);
-      });
+      // getSignedFileUrl(space.file_space.key).then((worldUrl) => {
+      //   setWorld(worldUrl);
+      // });
+      setWorld(getFileUrl(space.file_space.key));
     }
-    // setWorld('/test/worlds/room.glb');
   }, [space]);
 
   // on large non-touch displays, auto-show the about
@@ -179,52 +179,58 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
             }}
           >
             <table className={s.keybinding}>
-              <tr>
-                <th>Key</th>
-                <th>Action</th>
-              </tr>
-              <tr>
-                <td>
-                  W&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Move forward</td>
-              </tr>
-              <tr>
-                <td>
-                  A&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Move left</td>
-              </tr>
-              <tr>
-                <td>
-                  S&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Move backward</td>
-              </tr>
-              <tr>
-                <td>
-                  D&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Move right</td>
-              </tr>
-              <tr>
-                <td>
-                  Space&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Move up (jump)</td>
-              </tr>
-              <tr>
-                <td>
-                  Shift&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Move down</td>
-              </tr>
-              <tr>
-                <td>
-                  C&nbsp;<i>-</i>&nbsp;
-                </td>
-                <td>Switch from camera view to person view, and vice versa.</td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    W&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>Move forward</td>
+                </tr>
+                <tr>
+                  <td>
+                    A&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>Move left</td>
+                </tr>
+                <tr>
+                  <td>
+                    S&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>Move backward</td>
+                </tr>
+                <tr>
+                  <td>
+                    D&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>Move right</td>
+                </tr>
+                <tr>
+                  <td>
+                    Space&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>Move up (jump)</td>
+                </tr>
+                <tr>
+                  <td>
+                    Shift&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>Move down</td>
+                </tr>
+                <tr>
+                  <td>
+                    C&nbsp;<i>-</i>&nbsp;
+                  </td>
+                  <td>
+                    Switch from camera view to person view, and vice versa.
+                  </td>
+                </tr>
+              </tbody>
             </table>
             <div className={s.mouse_control}>
               Click and drag around the screen with your mouse to look around.
