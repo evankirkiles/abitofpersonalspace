@@ -249,14 +249,14 @@ export class CameraOperator
   public inputReceiverUpdate(timeStep: number): void {
     this.upVelocity = THREE.MathUtils.lerp(
       this.upVelocity,
-      this.vJoystickDistance +
+      Number(this.joystickActive) * Math.sin(this.joystickAngle) +
         +(this.actions.up.isPressed || this.actions.up2.isPressed) -
         +(this.actions.down.isPressed || this.actions.down2.isPressed),
       0.3
     );
     this.forwardVelocity = THREE.MathUtils.lerp(
       this.forwardVelocity,
-      Number(this.joystickActive) * Math.sin(this.joystickAngle) +
+      this.vJoystickDistance +
         +this.actions.forward.isPressed -
         +this.actions.back.isPressed,
       0.3

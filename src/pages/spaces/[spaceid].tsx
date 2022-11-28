@@ -16,10 +16,11 @@ import s from '../../styles/Space.module.scss';
 import Logo from '../../components/Logo/Logo';
 import Link from 'next/link';
 import getSeasonString from '../../util/getSeasonString';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSignedFileUrl } from '../../util/s3client';
 import Space from '../../components/Space/Space';
-import ScrollLock from 'react-scrolllock';
+import { BiBook, BiQuestionMark } from 'react-icons/bi';
+import Modal from '../../modals/Modal';
 
 /* -------------------------------------------------------------------------- */
 /*                                   TYPING                                   */
@@ -39,6 +40,17 @@ interface QParams extends ParsedUrlQuery {
 const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
   // use a fallback loading indicator
   const router = useRouter();
+
+  // get if touch screen
+  const isTouchScreen =
+    typeof window != 'undefined' &&
+    ('ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      (navigator as any).msMaxTouchPoints > 0);
+
+  // about modals
+  const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   // get the cached space query. we will also re-get the papercraft likes
   const { data: space } = useQuery(
@@ -60,6 +72,17 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
     // setWorld('/test/worlds/room.glb');
   }, [space]);
 
+  // on large non-touch displays, auto-show the about
+  useEffect(() => {
+    if (!isTouchScreen) {
+      setShowAboutModal(true);
+      if (window.innerWidth > 650) {
+        setShowSettingsModal(true);
+      }
+    }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <Head>
@@ -78,7 +101,6 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
           }}
         />
       </Head>
-      <ScrollLock />
       <div className={s.container}>
         {world ? <Space world={world} /> : null}
         <div className={s.overlay}>
@@ -98,7 +120,7 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
           <div className={s.credits}>
             SPACE OF
             <br />
-            {space ? space.author ?? 'anonymous' : null}
+            {space ? space.author ?? 'anonymous' : 'loading...'}
             <br />
             {space?.created_at ? (
               <>
@@ -112,9 +134,103 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
                 <br />
               </>
             ) : null}
+            <div className={s.button_row}>
+              <div
+                className={s.more_info}
+                onClick={() => setShowAboutModal(!showAboutModal)}
+              >
+                <BiBook />
+              </div>
+              <div
+                className={s.instructions}
+                onClick={() => setShowSettingsModal(!showSettingsModal)}
+              >
+                <BiQuestionMark />
+              </div>
+            </div>
           </div>
-          {/* <div className={s.more_info}>+</div>
-          <div className={s.instructions}>?</div> */}
+          <Modal on={showAboutModal} setOn={setShowAboutModal} title={'about'}>
+            <div className={s.space_author}>{space?.author ?? 'anonymous'}</div>
+            <h2 className={s.space_title}>
+              {'>> '}
+              {space?.title}
+            </h2>
+            <p className={s.space_desc}>
+              {space?.description ?? 'no description provided.'}
+            </p>
+            <div className={s.date_loc_row}>
+              {space?.created_at ? (
+                <div>
+                  {getSeasonString(new Date(space.created_at)).toLowerCase()}
+                </div>
+              ) : null}
+              {space?.location ? <div>{space.location}</div> : null}
+            </div>
+          </Modal>
+          <Modal
+            on={showSettingsModal}
+            setOn={setShowSettingsModal}
+            title={'settings'}
+            style={{
+              maxWidth: '300px',
+              left: 'unset',
+              right: '20px',
+              bottom: '20px',
+            }}
+          >
+            <table className={s.keybinding}>
+              <tr>
+                <th>Key</th>
+                <th>Action</th>
+              </tr>
+              <tr>
+                <td>
+                  W&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Move forward</td>
+              </tr>
+              <tr>
+                <td>
+                  A&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Move left</td>
+              </tr>
+              <tr>
+                <td>
+                  S&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Move backward</td>
+              </tr>
+              <tr>
+                <td>
+                  D&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Move right</td>
+              </tr>
+              <tr>
+                <td>
+                  Space&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Move up (jump)</td>
+              </tr>
+              <tr>
+                <td>
+                  Shift&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Move down</td>
+              </tr>
+              <tr>
+                <td>
+                  C&nbsp;<i>-</i>&nbsp;
+                </td>
+                <td>Switch from camera view to person view, and vice versa.</td>
+              </tr>
+            </table>
+            <div className={s.mouse_control}>
+              Click and drag around the screen with your mouse to look around.
+              The scroll wheel dollies in and out.
+            </div>
+          </Modal>
         </div>
       </div>
     </>

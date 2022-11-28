@@ -32,9 +32,9 @@
     transform: perspective(1200px) rotateY(60deg);
   }
 
-  &:hover .shadow_overlay {
-    display: block;
-  }
+  // &:hover .shadow_overlay {
+  //   display: block;
+  // }
 
   &:hover .img_preview {
     display: block;
@@ -114,7 +114,7 @@ $img_padding: 20px;
   background-color: black;
 }
 
-$img_padding_inner: 30px;
+$img_padding_inner: 20px;
 .shadow_overlay {
   position: absolute;
   top: $img_padding_inner;
@@ -122,8 +122,9 @@ $img_padding_inner: 30px;
   width: calc(100% - ($img_padding_inner * 2));
   height: calc(100% - ($img_padding_inner * 2));
   z-index: 0;
-  display: none;
-  box-shadow: inset 0px 0px 20px 20px rgba(0, 0, 0, 1);
+  // display: none;
+  box-shadow: inset 0px 0px 20px 25px rgba(0, 0, 0, 1);
+  border: 1px solid #202020;
 }
 
 .img_preview {

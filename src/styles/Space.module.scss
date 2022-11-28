@@ -123,12 +123,13 @@ $overlay_offset: 10px;
 }
 
 .button {
-  border: 1px solid $foreground;
+  border: 1px solid $background2;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 7px;
+  aspect-ratio: 1;
   background-color: $background;
   cursor: pointer;
   transition: transform 0.1s ease-in-out;
@@ -158,4 +159,70 @@ $overlay_offset: 10px;
   // width: 50px;
   // height: 50px;
   animation: fadeup 0.3s ease-in-out;
+}
+
+.space_author {
+  font-style: italic;
+  opacity: 0.5;
+  letter-spacing: 1px;
+  font-size: 13px;
+}
+
+.space_title {
+  // font-size: 17px;
+  margin-bottom: 5px;
+}
+
+.space_desc {
+  font-family: 'Helvetica';
+  margin-bottom: 5px;
+}
+
+.button_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.date_loc_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.5;
+  font-size: 13px;
+}
+
+.keybinding {
+  & i {
+    opacity: 0.3;
+  }
+
+  & td {
+    vertical-align: top;
+    text-align: left;
+    font-family: monospace;
+  }
+
+  & td:first-of-type {
+    text-align: right;
+  }
+
+  & th {
+    opacity: 0.5;
+    text-align: left;
+  }
+
+  & th:first-of-type {
+    text-align: right;
+    padding-right: 10px;
+  }
+}
+
+.mouse_control {
+  font-family: monospace;
 }
