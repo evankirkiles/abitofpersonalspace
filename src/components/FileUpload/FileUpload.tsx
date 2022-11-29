@@ -62,7 +62,7 @@ const FileUpload: React.FC<FileUploadProps> = function FileUpload({
         accept={accept}
         className={file ? s.file_input_real_populated : s.file_input_real}
         onChange={onChange}
-        required={required}
+        // required={required}
       />
     </>
   );

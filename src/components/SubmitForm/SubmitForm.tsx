@@ -280,14 +280,15 @@ const SubmitForm: React.FC = function () {
         </CSSTransition>
       </form>
       <div className={s.submit_row}>
-        <div
+        <button
+          form="spaceForm"
+          type="submit"
           className={`${s.submit_button} ${
             canSubmit && !submit.isLoading ? 'ready' : ''
           }`}
-          onClick={() => formRef.current?.requestSubmit()}
         >
           SUBMIT{' '}
-        </div>
+        </button>
       </div>
     </div>
   );
