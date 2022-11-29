@@ -35,7 +35,7 @@ const Modal: React.FC<ModalProps> = function Modal({
       unmountOnExit
     >
       <Draggable
-        handle={`.${s.modal_handle}`}
+        handle={`.${s.title_container}`}
         nodeRef={modalRef}
         bounds={'parent'}
       >
@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = function Modal({
             <div className={s.close_button} onClick={() => setOn(!on)}>
               X
             </div>
-            {title}
+            <div className={s.title_container}>{title}</div>
           </div>
           <div className={s.modal_contents}>{children}</div>
         </div>

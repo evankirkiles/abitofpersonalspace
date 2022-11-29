@@ -52,7 +52,6 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  cursor: grab;
   gap: 10px;
   letter-spacing: 3px;
   color: $foreground2;
@@ -76,4 +75,14 @@
   }
   border-right: 1px solid $background2;
   cursor: pointer;
+}
+
+.title_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+  cursor: grab;
 }
