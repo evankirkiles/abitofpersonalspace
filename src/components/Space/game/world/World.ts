@@ -391,8 +391,8 @@ export class World {
     this.graphicsWorld.add(gltf.scene);
 
     // add a light to the scene
-    this.graphicsWorld.add(new THREE.AmbientLight(0x0f0f0f));
-    this.graphicsWorld.add(new THREE.HemisphereLight('#76B6E7', '#E7324F'));
+    this.graphicsWorld.add(new THREE.AmbientLight(0xffffff));
+    this.graphicsWorld.add(new THREE.HemisphereLight('#FFFFFF', '#000000'));
     // this.graphicsWorld.add(new THREE.HemisphereLight('#66B588', '#0D85AA'));
 
     // find default scenario
