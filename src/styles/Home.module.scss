@@ -54,23 +54,6 @@
   }
 }
 
-.door {
-  width: 100%;
-  border: $border;
-  aspect-ratio: 1/1.5;
-  padding: 10px;
-  cursor: pointer;
-  transition: transform 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-
-  &:hover {
-    transform: scale(0.95);
-  }
-}
-
 .header_container {
   width: 100%;
   position: relative;

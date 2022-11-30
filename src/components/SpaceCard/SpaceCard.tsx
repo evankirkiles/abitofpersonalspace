@@ -54,7 +54,7 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
             <div className={s.location}>{space.location}</div>
           ) : null}
           <div className={s.title}>{space.title}</div>
-          {space.author ? <div className={s.author}>{space.author}</div> : null}
+          <div className={s.author}>{space.author ?? 'anonymous'}</div>
         </div>
         <div className={s.door_handle}></div>
       </div>

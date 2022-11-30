@@ -70,6 +70,8 @@ export class CameraOperator
 
     // offset state
     this.freeTarget = new THREE.Object3D();
+    this.minZoom = 0.5;
+    this.maxZoom = 4;
     this.movementSpeed = 0.06;
     this.restThreshold = 0.1;
 
@@ -239,7 +241,7 @@ export class CameraOperator
     this.azimuthRotateSpeed = 0.4;
     this.polarRotateSpeed = 0.4;
     this.followMode = false;
-    this.mouseButtons.wheel = CameraControls.ACTION.ROTATE;
+    this.mouseButtons.wheel = CameraControls.ACTION.ZOOM;
   }
 
   /**
@@ -292,6 +294,7 @@ export class CameraOperator
         .add(new THREE.Vector3(0, 1, 0));
       // move our target back to  character
       const nobot = this.nobotCaller;
+      this.zoomTo(1, true);
       this.setLookAt(
         newPos.x,
         newPos.y,
