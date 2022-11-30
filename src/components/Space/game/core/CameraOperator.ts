@@ -242,6 +242,7 @@ export class CameraOperator
     this.polarRotateSpeed = 0.4;
     this.followMode = false;
     this.mouseButtons.wheel = CameraControls.ACTION.ZOOM;
+    this.touches.two = CameraControls.ACTION.TOUCH_ZOOM;
   }
 
   /**
@@ -310,6 +311,7 @@ export class CameraOperator
         this.transitioning = false;
         this.distance = 2;
         this.mouseButtons.wheel = CameraControls.ACTION.DOLLY;
+        this.touches.two = CameraControls.ACTION.TOUCH_DOLLY;
       });
     }
   }
