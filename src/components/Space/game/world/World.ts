@@ -92,7 +92,7 @@ export class World {
 
     // initialize Renderer
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
-    this.renderer.setPixelRatio(0.3);
+    // this.renderer.setPixelRatio(0.3);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
