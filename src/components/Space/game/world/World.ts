@@ -391,7 +391,7 @@ export class World {
     this.graphicsWorld.add(gltf.scene);
 
     // add a light to the scene
-    this.graphicsWorld.add(new THREE.AmbientLight(0xffffff));
+    this.graphicsWorld.add(new THREE.AmbientLight(0x9f9f9f));
     this.graphicsWorld.add(new THREE.HemisphereLight('#FFFFFF', '#000000'));
     // this.graphicsWorld.add(new THREE.HemisphereLight('#66B588', '#0D85AA'));
 
