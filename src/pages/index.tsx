@@ -59,14 +59,15 @@ const HomePage: React.FC = function Home() {
         <div className={s.main_container}>
           <h1 className={s.title}>A&nbsp;BIT&nbsp;OF PERSONAL&nbsp;SPACE</h1>
           <div className={s.subtext} style={{ opacity: 0.8 }}>
-            is an exploration into the places we call home. the spaces embodied
-            here are <i>us</i>––they define our selves and our interactions with
-            the world. yet what happens when we share these entirely personal
-            places? is their magic lost, or does it regain power through the
-            eyes of another beholder? who would even want to share their own
-            personal space? enter and see for yourself. and please,{' '}
+            is an exploration into the places we inhabit and populate. the
+            spaces embodied here are <i>us</i>––they define our selves, our
+            practices, our interactions with the world. yet what happens when we
+            share these personal places? can they retain their power and
+            significance through the eyes of an impassive beholder? and how much
+            of us is reflected in the space we carve out? click around to
+            examine a growing collection of personal space. and please,{' '}
             <Link href="/shoes">
-              <a className={s.shoes}>take off your shoes.</a>
+              <a className={s.shoes}>sign our guest book!</a>
             </Link>
           </div>
         </div>

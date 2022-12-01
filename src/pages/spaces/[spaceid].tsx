@@ -41,13 +41,6 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
   // use a fallback loading indicator
   const router = useRouter();
 
-  // get if touch screen
-  const isTouchScreen =
-    typeof window != 'undefined' &&
-    ('ontouchstart' in window ||
-      navigator.maxTouchPoints > 0 ||
-      (navigator as any).msMaxTouchPoints > 0);
-
   // about modals
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -74,6 +67,12 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
 
   // on large non-touch displays, auto-show the about
   useEffect(() => {
+    // get if touch screen
+    const isTouchScreen =
+      typeof window != 'undefined' &&
+      ('ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        (navigator as any).msMaxTouchPoints > 0);
     if (!isTouchScreen) {
       setShowAboutModal(true);
       if (window.innerWidth > 650) {
@@ -118,7 +117,7 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
             <Logo />
           </div>
           <div className={s.credits}>
-            SPACE OF
+            <u>SPACE OF</u>
             <br />
             {space ? space.author ?? 'anonymous' : 'loading...'}
             <br />
@@ -151,13 +150,18 @@ const SpacePage: NextPage<SpacePageProps> = function SpacePage({ spaceid }) {
           </div>
           <Modal on={showAboutModal} setOn={setShowAboutModal} title={'about'}>
             <div className={s.space_author}>{space?.author ?? 'anonymous'}</div>
-            <h2 className={s.space_title}>
-              {'>> '}
-              {space?.title}
-            </h2>
+            <h2 className={s.space_title}>{space?.title}</h2>
             <p className={s.space_desc}>
               {space?.description ?? 'no description provided.'}
             </p>
+            {space?.href ? (
+              <p className={s.space_href}>
+                {'>> '}
+                <a href={space.href} target="_blank" rel="noopener noreferrer">
+                  {new URL(space.href).hostname}
+                </a>
+              </p>
+            ) : null}
             <div className={s.date_loc_row}>
               {space?.created_at ? (
                 <div>

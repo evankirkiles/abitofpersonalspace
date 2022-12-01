@@ -117,6 +117,7 @@ export interface paths {
           location?: parameters['rowFilter.spaces.location'];
           /** Direction which the door image opens */
           door_handle_on_right?: parameters['rowFilter.spaces.door_handle_on_right'];
+          href?: parameters['rowFilter.spaces.href'];
           /** Filtering Columns */
           select?: parameters['select'];
           /** Ordering */
@@ -178,6 +179,7 @@ export interface paths {
           location?: parameters['rowFilter.spaces.location'];
           /** Direction which the door image opens */
           door_handle_on_right?: parameters['rowFilter.spaces.door_handle_on_right'];
+          href?: parameters['rowFilter.spaces.href'];
         };
         header: {
           /** Preference */
@@ -203,6 +205,7 @@ export interface paths {
           location?: parameters['rowFilter.spaces.location'];
           /** Direction which the door image opens */
           door_handle_on_right?: parameters['rowFilter.spaces.door_handle_on_right'];
+          href?: parameters['rowFilter.spaces.href'];
         };
         body: {
           /** spaces */
@@ -477,6 +480,8 @@ export interface definitions {
      * @default false
      */
     door_handle_on_right: boolean;
+    /** Format: text */
+    href?: string;
   };
   /** @description Tags to be applied to spaces */
   tags: {
@@ -586,6 +591,8 @@ export interface parameters {
    * @description Direction which the door image opens
    */
   'rowFilter.spaces.door_handle_on_right': string;
+  /** Format: text */
+  'rowFilter.spaces.href': string;
   /** @description tags */
   'body.tags': definitions['tags'];
   /** Format: character varying */
