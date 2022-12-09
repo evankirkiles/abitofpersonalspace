@@ -92,7 +92,7 @@ export class World {
 
     // initialize Renderer
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
-    this.renderer.setPixelRatio(0.3);
+    // this.renderer.setPixelRatio(0.3);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -392,8 +392,10 @@ export class World {
     this.graphicsWorld.add(gltf.scene);
 
     // add a light to the scene
-    this.graphicsWorld.add(new THREE.AmbientLight(0x9f9f9f));
-    this.graphicsWorld.add(new THREE.HemisphereLight('#FFFFFF', '#000000'));
+    this.graphicsWorld.add(new THREE.AmbientLight(0xd0d0d0));
+    this.graphicsWorld.add(
+      new THREE.HemisphereLight('#e6e1b8', '#595850', 0.5)
+    );
     // this.graphicsWorld.add(new THREE.HemisphereLight('#66B588', '#0D85AA'));
 
     // find default scenario

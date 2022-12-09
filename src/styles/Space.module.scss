@@ -226,3 +226,19 @@ $overlay_offset: 10px;
 .mouse_control {
   font-family: monospace;
 }
+
+.space_href {
+  margin-top: -5px;
+  margin-bottom: 3px;
+  opacity: 0.8;
+  font-style: italic;
+
+  & a {
+    margin-left: 3px;
+    transition: color 0.1s ease-in-out;
+  }
+
+  & a:hover {
+    color: $highlight;
+  }
+}
