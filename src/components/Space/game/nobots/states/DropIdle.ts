@@ -39,7 +39,7 @@ export class DropIdle extends NobotStateBase {
 
   public onInputChange(): void {
     super.onInputChange();
-    if (this.nobot.actions.jump.justPressed) {
+    if (this.nobot.inputManager.buttons.up.justPressed) {
       this.nobot.setState(new JumpIdle(this.nobot));
     }
     if (this.anyDirection()) {

@@ -29,7 +29,7 @@ export class DropRunning extends NobotStateBase {
     if (!this.anyDirection()) {
       this.nobot.setState(new EndWalk(this.nobot));
     }
-    if (this.nobot.actions.jump.justPressed) {
+    if (this.nobot.inputManager.buttons.up.justPressed) {
       this.nobot.setState(new JumpRunning(this.nobot));
     }
   }

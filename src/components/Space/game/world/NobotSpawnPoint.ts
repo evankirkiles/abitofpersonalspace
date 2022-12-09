@@ -34,7 +34,7 @@ export class NobotSpawnPoint implements ISpawnPoint {
    */
   public async spawn(world: World) {
     const playerGLTF = await world.loadingManager.loadGLTF(PLAYER_MODEL);
-    const nobot = new Nobot(playerGLTF);
+    const nobot = new Nobot(playerGLTF, world.inputManager);
     const worldPos = new THREE.Vector3();
     this.object.getWorldPosition(worldPos);
     nobot.setPosition(worldPos.x, worldPos.y, worldPos.z);

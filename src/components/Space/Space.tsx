@@ -9,6 +9,7 @@ import * as APIt from '../../supabase/types';
 import { World } from './game/world/World';
 import { AiOutlineCamera, AiOutlineUser } from 'react-icons/ai';
 import s from './Space.module.scss';
+import { InputButton } from './game/enums/UserInputs';
 
 type SpaceProps = {
   world: string;
@@ -86,10 +87,11 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
               : 'none',
         }}
         onMouseDown={() => {
-          if (
-            worldRef.current &&
-            worldRef.current.inputManager.onButtonPress()
-          ) {
+          if (worldRef.current) {
+            worldRef.current.inputManager.handleButtonEvent(
+              'use' as InputButton,
+              true
+            );
             setCamView(!camView);
           }
         }}

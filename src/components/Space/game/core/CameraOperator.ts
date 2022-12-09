@@ -9,11 +9,13 @@ import _ from 'lodash';
 import { EventData, JoystickOutputData } from 'nipplejs';
 import * as THREE from 'three';
 import { acceleratedRaycast } from 'three-mesh-bvh';
+import { InputButton } from '../enums/UserInputs';
 import { IInputReceiver } from '../interfaces/IInputReceiver';
 import { IUpdatable } from '../interfaces/IUpdatable';
 import { Nobot } from '../nobots/Nobot';
 import { World } from '../world/World';
 import * as Utils from './FunctionLibrary';
+import { InputManager } from './InputManager';
 import { KeyBinding } from './KeyBinding';
 
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
@@ -25,6 +27,7 @@ export class CameraOperator
   implements IInputReceiver, IUpdatable
 {
   public updateOrder: number = 4;
+  public inputManager: InputManager;
 
   // scene / world properties
   public world: World;
@@ -44,13 +47,6 @@ export class CameraOperator
   public forwardVelocity: number = 0;
   public rightVelocity: number = 0;
 
-  // actions & character
-  public actions: { [action: string]: KeyBinding };
-  // joystick angle + distances;
-  public joystickActive: boolean = false;
-  public joystickAngle: number = 0;
-  public vJoystickDistance: number = 0;
-
   /**
    * Constructs a CameraOperator which can be added as an updatable to the world.
    * The CameraOperator follows the nobot from its position, allowing for a minor
@@ -61,12 +57,14 @@ export class CameraOperator
   constructor(
     world: World,
     camera: THREE.PerspectiveCamera,
-    domElement: HTMLCanvasElement
+    domElement: HTMLCanvasElement,
+    inputManager: InputManager
   ) {
     super(camera, domElement);
     // set properties
     this.world = world;
     this.camera = camera;
+    this.inputManager = inputManager;
 
     // offset state
     this.freeTarget = new THREE.Object3D();
@@ -74,19 +72,6 @@ export class CameraOperator
     this.maxZoom = 4;
     this.movementSpeed = 0.06;
     this.restThreshold = 0.1;
-
-    // create actions
-    this.actions = {
-      forward: new KeyBinding('KeyW'),
-      back: new KeyBinding('KeyS'),
-      left: new KeyBinding('KeyA'),
-      right: new KeyBinding('KeyD'),
-      up: new KeyBinding('KeyE'),
-      up2: new KeyBinding('Space'),
-      down: new KeyBinding('KeyQ'),
-      down2: new KeyBinding('ShiftLeft'),
-      fast: new KeyBinding('KeyR'),
-    };
   }
 
   /* -------------------------------------------------------------------------- */
@@ -110,7 +95,9 @@ export class CameraOperator
         // calculate new target position
         const speed =
           this.movementSpeed *
-          (this.actions.fast.isPressed ? delta * 600 : delta * 120);
+          (this.inputManager.buttons.speed.isPressed
+            ? delta * 600
+            : delta * 120);
         const up = Utils.getUp(this.camera);
         const right = Utils.getRight(this.camera);
         const forward = Utils.getBack(this.camera);
@@ -146,77 +133,14 @@ export class CameraOperator
   /* -------------------------------------------------------------------------- */
 
   /**
-   * Not sure what the mouse handler will be used for. Definitely for clicking
-   * on objects in the scene with raycasting, at least.
-   * @param event
-   * @param code
-   * @param pressed
+   * Funnels a button event through to its action handler for the nobot.
+   * @param event The nipple event passed from an InputManager
+   * @param data The state of the joystick
    */
-  public handleMouseButton(
-    event: MouseEvent,
-    code: string,
-    pressed: boolean
-  ): void {
-    // TODO: Some mouse click event with the camera
-    Object.keys(this.actions).forEach((action) => {
-      if (Object.prototype.hasOwnProperty.call(this.actions, action)) {
-        const binding = this.actions[action];
-        if (_.includes(binding.eventCodes, code)) {
-          binding.isPressed = pressed;
-        }
-      }
-    });
-  }
-
-  /**
-   * Handle keyboard input to the camera.
-   * @param e
-   * @param code
-   * @param pressed
-   */
-  public handleKeyboardEvent(
-    e: KeyboardEvent,
-    code: string,
-    pressed: boolean
-  ): void {
-    if (code === 'KeyC' && pressed) {
+  public handleButtonEvent(button: InputButton, pressed: boolean): void {
+    if (button === InputButton.VIEWTOGGLE && pressed) {
       this.followNobot();
-    } else {
-      for (const action in this.actions) {
-        if (this.actions.hasOwnProperty(action)) {
-          const binding = this.actions[action];
-          if (_.includes(binding.eventCodes, code)) {
-            binding.isPressed = pressed;
-          }
-        }
-      }
     }
-  }
-
-  /**
-   * Handle nipple input to the camera.
-   * @param state the nipple state
-   */
-  public handleNippleEvent(active: boolean, angle: number): void {
-    this.joystickActive = active;
-    this.joystickAngle = angle;
-  }
-
-  /**
-   * Handle vertical input to the camera.
-   * @param state the nipple state
-   */
-  public handleVNippleEvent(active: boolean, distance: number): void {
-    this.vJoystickDistance = distance;
-  }
-
-  /**
-   * Handle button input to the camera
-   * @param button
-   */
-  public handleButtonEvent(): boolean {
-    this.followNobot();
-    return true;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -250,27 +174,30 @@ export class CameraOperator
    * @param timeStep
    */
   public inputReceiverUpdate(timeStep: number): void {
+    const joystick = this.inputManager.joysticks.main;
+    const buttons = this.inputManager.buttons;
     this.upVelocity = THREE.MathUtils.lerp(
       this.upVelocity,
-      Number(this.joystickActive) * Math.sin(this.joystickAngle) +
-        +(this.actions.up.isPressed || this.actions.up2.isPressed) -
-        +(this.actions.down.isPressed || this.actions.down2.isPressed),
+      Number(buttons.up.isPressed) - Number(buttons.down.isPressed),
       0.3
     );
     this.forwardVelocity = THREE.MathUtils.lerp(
       this.forwardVelocity,
-      this.vJoystickDistance +
-        +this.actions.forward.isPressed -
-        +this.actions.back.isPressed,
+      Number(joystick.isActive) * Math.sin(joystick.angle),
       0.3
     );
     this.rightVelocity = THREE.MathUtils.lerp(
       this.rightVelocity,
-      Number(this.joystickActive) * Math.cos(this.joystickAngle) +
-        +this.actions.right.isPressed -
-        +this.actions.left.isPressed,
+      Number(joystick.isActive) * Math.cos(joystick.angle),
       0.3
     );
+  }
+
+  /**
+   * No camera state, so we don't care about "just" values
+   */
+  public inputReceiverChange(): void {
+    return;
   }
 
   /* -------------------------------------------------------------------------- */

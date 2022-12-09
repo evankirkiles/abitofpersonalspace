@@ -73,13 +73,7 @@ export abstract class NobotStateBase implements INobotState {
    * @returns
    */
   public anyDirection(): boolean {
-    return (
-      this.nobot.joystickActive ||
-      this.nobot.actions.up.isPressed ||
-      this.nobot.actions.down.isPressed ||
-      this.nobot.actions.left.isPressed ||
-      this.nobot.actions.right.isPressed
-    );
+    return this.nobot.inputManager.joysticks.main.isActive;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -117,7 +111,10 @@ export abstract class NobotStateBase implements INobotState {
    */
   public onInputChange(): void {
     // if the nobot can find interactions and they press enter, look for them
-    if (this.canFindInteractions && this.nobot.actions.use.justPressed) {
+    if (
+      this.canFindInteractions &&
+      this.nobot.inputManager.buttons.use.justPressed
+    ) {
       // this.nobot TODO: Find interaction
       // if the nobot can enter interactions and they are in an interaction
     } else if (
@@ -125,14 +122,9 @@ export abstract class NobotStateBase implements INobotState {
       this.nobot.interactionEntryInstance !== null
     ) {
       // if the nobot presses any movement key, get out of the interaction
-      if (
-        this.nobot.actions.up.justPressed ||
-        this.nobot.actions.down.justPressed ||
-        this.nobot.actions.left.justPressed ||
-        this.nobot.actions.right.justPressed
-      ) {
+      if (this.nobot.inputManager.joysticks.main.isActive) {
         this.nobot.interactionEntryInstance = null;
-        this.nobot.actions.up.isPressed = false;
+        this.nobot.inputManager.buttons.up.isPressed = false;
       }
     }
   }

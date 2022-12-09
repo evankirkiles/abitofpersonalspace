@@ -43,7 +43,7 @@ export class Walk extends NobotStateBase {
   public onInputChange(): void {
     super.onInputChange();
     if (!this.anyDirection()) this.nobot.setState(new EndWalk(this.nobot));
-    if (this.nobot.actions.jump.justPressed)
+    if (this.nobot.inputManager.buttons.up.justPressed)
       this.nobot.setState(new JumpRunning(this.nobot));
     if (!this.anyDirection()) {
       if (this.nobot.velocity.length() > 1) {

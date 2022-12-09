@@ -96,6 +96,14 @@ export class World {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+    // initialization
+    this.inputManager = new InputManager(this, this.target);
+    this.loadingManager = new LoadingManager(this, {
+      onStart: callbacks.onDownloadStart,
+      onProgress: callbacks.onDownloadProgress,
+      onFinished: callbacks.onDownloadFinish,
+    });
+
     // set up resizing on window size change
     const onWindowResize = () => {
       // get the size of the canvas for aspect ratio
@@ -114,7 +122,8 @@ export class World {
     this.cameraOperator = new CameraOperator(
       this,
       this.camera,
-      this.renderer.domElement
+      this.renderer.domElement,
+      this.inputManager
     );
     this.cameraOperator.minDistance = 1;
     this.cameraOperator.maxDistance = 20;
@@ -138,14 +147,6 @@ export class World {
     this.logicDelta = 0;
     this.sinceLastFrame = 0;
     this.justRendered = false;
-
-    // initialization
-    this.inputManager = new InputManager(this, this.target);
-    this.loadingManager = new LoadingManager(this, {
-      onStart: callbacks.onDownloadStart,
-      onProgress: callbacks.onDownloadProgress,
-      onFinished: callbacks.onDownloadFinish,
-    });
 
     // load scene if path is supplied
     if (worldScenePath) {
