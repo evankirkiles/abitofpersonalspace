@@ -83,8 +83,8 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
           >
             <defs>
               <radialGradient id="maskGradient">
-                <stop offset="10%" stop-color="black" />
-                <stop offset="95%" stop-color="white" />
+                <stop offset="10%" stopColor="black" />
+                <stop offset="95%" stopColor="white" />
               </radialGradient>
             </defs>
             <mask

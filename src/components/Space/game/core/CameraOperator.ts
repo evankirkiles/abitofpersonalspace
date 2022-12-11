@@ -46,6 +46,9 @@ export class CameraOperator
   public upVelocity: number = 0;
   public forwardVelocity: number = 0;
   public rightVelocity: number = 0;
+  // rotation velocity
+  public azimuthVelocity: number = 0;
+  public polarVelocity: number = 0;
 
   /**
    * Constructs a CameraOperator which can be added as an updatable to the world.
@@ -72,6 +75,7 @@ export class CameraOperator
     this.maxZoom = 4;
     this.movementSpeed = 0.06;
     this.restThreshold = 0.1;
+    this.maxPolarAngle = Math.PI * 0.55;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -123,6 +127,11 @@ export class CameraOperator
           0.3
         );
       }
+      // calculate new rotation
+      this.updateCameraRotationControls();
+      this.rotate(this.azimuthVelocity, this.polarVelocity, false);
+      this.azimuthVelocity = THREE.MathUtils.lerp(this.azimuthVelocity, 0, 0.3);
+      this.polarVelocity = THREE.MathUtils.lerp(this.polarVelocity, 0, 0.3);
     }
     // call the initial camera controls update func
     this.update(delta);
@@ -164,6 +173,7 @@ export class CameraOperator
     this.minDistance = this.maxDistance = 1e-5;
     this.azimuthRotateSpeed = 0.4;
     this.polarRotateSpeed = 0.4;
+    this.maxPolarAngle = Math.PI;
     this.followMode = false;
     this.mouseButtons.wheel = CameraControls.ACTION.ZOOM;
     this.touches.two = CameraControls.ACTION.TOUCH_ZOOM;
@@ -174,6 +184,7 @@ export class CameraOperator
    * @param timeStep
    */
   public inputReceiverUpdate(timeStep: number): void {
+    // handle movement using main joystick
     const joystick = this.inputManager.joysticks.main;
     const buttons = this.inputManager.buttons;
     this.upVelocity = THREE.MathUtils.lerp(
@@ -212,6 +223,7 @@ export class CameraOperator
       // reset our things back to defaults
       this.minDistance = 1;
       this.maxDistance = 20;
+      this.maxPolarAngle = Math.PI * 0.55;
       this.azimuthRotateSpeed = 1.0;
       this.polarRotateSpeed = 1.0;
       this.transitioning = true;
@@ -241,5 +253,32 @@ export class CameraOperator
         this.touches.two = CameraControls.ACTION.TOUCH_DOLLY;
       });
     }
+  }
+
+  /**
+   * Updates the speed of rotation of the camera based on secondary joystick
+   * input, used for both nobot and camera controlling. Replaces usual mouse
+   * or touch controls.
+   */
+  public updateCameraRotationControls() {
+    const joystick = this.inputManager.joysticks.secondary;
+    const azimuthMultiplier = this.followMode ? 0.1 : 0.05;
+    const polarMultiplier = -0.025;
+    this.azimuthVelocity = THREE.MathUtils.lerp(
+      this.azimuthVelocity,
+      Number(joystick.isActive) *
+        Math.cos(joystick.angle) *
+        joystick.magnitude *
+        azimuthMultiplier,
+      0.3
+    );
+    this.polarVelocity = THREE.MathUtils.lerp(
+      this.polarVelocity,
+      Number(joystick.isActive) *
+        Math.sin(joystick.angle) *
+        joystick.magnitude *
+        polarMultiplier,
+      0.3
+    );
   }
 }

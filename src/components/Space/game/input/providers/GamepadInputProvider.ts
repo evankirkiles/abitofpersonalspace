@@ -5,28 +5,33 @@
  * 2022 the nobot space,
  */
 import { InputManager } from '../../core/InputManager';
-import { InputJoystick } from '../../enums/UserInputs';
+import { InputButton, InputJoystick } from '../../enums/UserInputs';
 import { IInputProvider } from '../../interfaces/IInputProvider';
+import type Gamepads_ from 'gamepads';
+
+let Gamepads: typeof Gamepads_;
 
 export default class GamepadInputProvider implements IInputProvider {
   private manager: InputManager;
   isListening: boolean = false;
-
-  // keep track of connected gamepads
-  _haveEvents = false;
-  _haveWebkitEvents = false;
-  controllers: {
-    [key: number]: Gamepad;
-  } = {};
 
   // map controller joysticks (XY)
   bindings_controllers: InputJoystick[] = [
     InputJoystick.MAIN,
     InputJoystick.SECONDARY,
   ];
-  // map controller buttons
 
-  // keep track of previous state for each gamepad
+  // map controller buttons
+  bindings_buttons: (InputButton | null)[] = [
+    null,
+    null,
+    null,
+    null,
+    InputButton.UP,
+    InputButton.USE,
+    InputButton.VIEWTOGGLE,
+    InputButton.DOWN,
+  ];
 
   /**
    * On construction, immediately add a listener that will continually check
@@ -35,17 +40,27 @@ export default class GamepadInputProvider implements IInputProvider {
    */
   constructor(manager: InputManager) {
     this.manager = manager;
-    // add gamepad connect / disconnected listeners
-    if ('GamepadEvent' in window) {
-      window.addEventListener('gamepadconnected', (e) => {
-        this.controllers[e.gamepad.index] = e.gamepad;
+    Gamepads = require('gamepads');
+    Gamepads.start(); // begin scanning for gamepads to connect with
+    Gamepads.addEventListener('connect', (e: any) => {
+      console.log('Gamepad connected.');
+      e.gamepad.joystickDeadzone = 0.1;
+      // add listeners to gamepad
+      e.gamepad.addEventListener('buttonvaluechange', (evt: any) => {
+        console.log('hi');
+        this.onButtonChange(evt);
       });
-      window.addEventListener('gamepaddisconnected', (e) => {
-        delete this.controllers[e.gamepad.index];
-      });
-    } else {
-      setInterval(() => this.scanGamepads(), 500);
-    }
+      e.gamepad.addEventListener(
+        'joystickmove',
+        (evt: any) => this.onJoystickMove(evt, InputJoystick.MAIN),
+        [0, 1] // js1
+      );
+      e.gamepad.addEventListener(
+        'joystickmove',
+        (evt: any) => this.onJoystickMove(evt, InputJoystick.SECONDARY),
+        [2, 3] // js2
+      );
+    });
   }
 
   /* -------------------------------------------------------------------------- */
@@ -56,7 +71,6 @@ export default class GamepadInputProvider implements IInputProvider {
    * Applies all the handlers to the DOM, if not already applied
    */
   listen() {
-    if (this.isListening) return;
     this.isListening = true;
   }
 
@@ -64,53 +78,37 @@ export default class GamepadInputProvider implements IInputProvider {
    * Removes all the mouse handlers to the DOM, if not already removed
    */
   deafen(): void {
-    if (!this.isListening) return;
     this.isListening = false;
   }
 
-  /**
-   * Emits events of differences between previous and current gamepad state.
-   * @returns
-   */
-  update() {
-    if (!this.isListening) return;
-    for (const j in this.controllers) {
-      const gamepad = this.controllers[j];
-      console.log(gamepad.axes);
-      // emit the axes
-      for (let i = 0; i < this.bindings_controllers.length; i++) {
-        const x = gamepad.axes[i * 2];
-        const y = gamepad.axes[i * 2 + 1];
-        this.manager.handleJoystickEvent(
-          this.bindings_controllers[i],
-          Math.atan2(y, x),
-          Math.hypot(x, y),
-          x === 0 && y === 0
-        );
-      }
-    }
+  /* -------------------------------------------------------------------------- */
+  /*                                  LISTENERS                                 */
+  /* -------------------------------------------------------------------------- */
+
+  onButtonChange(e: any): void {
+    console.log(e.index, this.bindings_buttons[e.index]);
+    if (!this.isListening || !this.bindings_buttons[e.index]) return;
+    this.manager.handleButtonEvent(this.bindings_buttons[e.index]!, !!e.value);
   }
 
-  /* -------------------------------------------------------------------------- */
-  /*                               INITIALIZATION                               */
-  /* -------------------------------------------------------------------------- */
-
   /**
-   * Manually populates the gamepads connected to the game.
+   * Emit joystick events to input manager
+   * @param e
+   * @param joystick
+   * @returns
    */
-  private scanGamepads(): void {
-    const gamepads: (Gamepad | null)[] = navigator.getGamepads
-      ? navigator.getGamepads()
-      : // @ts-ignore
-      navigator.webkitGetGamepads
-      ? // @ts-ignore
-        navigator.webkitGetGamepads()
-      : [];
-    for (let i = 0; i < gamepads.length; i++) {
-      if (!gamepads[i]) continue;
-      if (this.controllers[gamepads[i]!.index] !== undefined) {
-        this.controllers[gamepads[i]!.index] = gamepads[i]!;
-      }
-    }
+  onJoystickMove(e: any, joystick: InputJoystick): void {
+    if (!this.isListening) return;
+    const invert = joystick === InputJoystick.MAIN ? -1 : 1;
+    const x =
+      Math.abs(e.horizontalValue) < 0.1 ? 0 : e.horizontalValue * invert;
+    const y = Math.abs(e.verticalValue) < 0.1 ? 0 : e.verticalValue * invert;
+    this.manager.handleJoystickEvent(
+      joystick,
+      Math.atan2(y, x),
+      Math.hypot(x, y),
+      x !== 0 || y !== 0
+    );
+    return;
   }
 }
