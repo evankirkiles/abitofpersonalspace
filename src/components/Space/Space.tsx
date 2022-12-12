@@ -5,11 +5,10 @@
  * 2022 the nobot space,
  */
 import { useEffect, useRef, useState } from 'react';
-import * as APIt from '../../supabase/types';
-import { World } from './game/world/World';
+import type World from 'web-worlding';
 import { AiOutlineCamera, AiOutlineUser } from 'react-icons/ai';
 import s from './Space.module.scss';
-import { InputButton } from './game/enums/UserInputs';
+import { InputButton } from 'web-worlding/dist/enums/UserInputs';
 
 type SpaceProps = {
   world: string;
@@ -44,16 +43,26 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
       worldRef.current.destroy();
     }
     // now rebuild it with the better world
-    worldRef.current = new World(canvasRef.current!, world, {
-      onDownloadFinish: () => setIsLoading(false),
-      onDownloadProgress: (p: number, d: number, t: number) => {
-        if (loadingRef.current && loadingDRef.current && loadingTRef.current) {
-          loadingRef.current.style.transform = `scaleX(${p})`;
-          loadingDRef.current.textContent = formatBytes(d, 1);
-          loadingTRef.current.textContent = formatBytes(t, 1);
-        }
-      },
-    });
+    var WebWorld: typeof World = require('web-worlding').default;
+    worldRef.current = new WebWorld(
+      canvasRef.current!,
+      '/assets/characters/personspace.glb',
+      world,
+      {
+        onDownloadFinish: () => setIsLoading(false),
+        onDownloadProgress: (p: number, d: number, t: number) => {
+          if (
+            loadingRef.current &&
+            loadingDRef.current &&
+            loadingTRef.current
+          ) {
+            loadingRef.current.style.transform = `scaleX(${p})`;
+            loadingDRef.current.textContent = formatBytes(d, 1);
+            loadingTRef.current.textContent = formatBytes(t, 1);
+          }
+        },
+      }
+    );
   }, [world]);
 
   return (
