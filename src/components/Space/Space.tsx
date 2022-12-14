@@ -61,9 +61,6 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
             loadingTRef.current.textContent = formatBytes(t, 1);
           }
         },
-      },
-      {
-        forceTouchScreen: true,
       }
     );
   }, [world]);
