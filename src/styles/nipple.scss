@@ -17,3 +17,10 @@
   border: 1px solid $foreground !important;
   background-color: $background !important;
 }
+
+.web-worlding-button {
+  transition: opacity 0.3s ease-in-out;
+  &:hover {
+    opacity: 1 !important;
+  }
+}
