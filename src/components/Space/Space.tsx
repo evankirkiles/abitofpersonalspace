@@ -84,29 +84,6 @@ const Space: React.FC<SpaceProps> = function Space({ world }) {
           </div>
         </div>
       ) : null}
-      <div
-        className={s.view_button}
-        ref={viewToggleRef}
-        style={{
-          display:
-            'ontouchstart' in window ||
-            navigator.maxTouchPoints > 0 ||
-            (navigator as any).msMaxTouchPoints > 0
-              ? 'flex'
-              : 'none',
-        }}
-        onMouseDown={() => {
-          if (worldRef.current) {
-            worldRef.current.inputManager.handleButtonEvent(
-              'use' as InputButton,
-              true
-            );
-            setCamView(!camView);
-          }
-        }}
-      >
-        {camView ? <AiOutlineCamera /> : <AiOutlineUser />}
-      </div>
     </div>
   );
 };
