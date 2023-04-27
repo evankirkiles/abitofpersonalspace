@@ -14,6 +14,7 @@ import '../styles/lazyloadimgs.scss';
 import 'lazysizes';
 import 'lazysizes/plugins/attrchange/ls.attrchange';
 import SEO from '../../next-seo.config';
+import { Analytics } from '@vercel/analytics/react';
 import { QueryClientProvider, QueryClient, Hydrate } from 'react-query';
 import { useState } from 'react';
 
@@ -30,6 +31,7 @@ function MyApp({
         <QueryClientProvider client={queryClient} contextSharing={true}>
           <Hydrate state={pageProps.dehydratedState}>
             <Component {...pageProps} />
+            <Analytics />
           </Hydrate>
         </QueryClientProvider>
       </ImgixProvider>
