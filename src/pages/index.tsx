@@ -65,10 +65,11 @@ const HomePage: React.FC = function Home() {
             share these personal places? can they retain their power and
             significance through the eyes of an impassive beholder? and how much
             of us is reflected in the space we carve out? click around to
-            examine a growing collection of personal space. and please,{' '}
+            examine a growing collection of a bit of personal space.
+            {/* and please,{' '}
             <Link href="/shoes">
               <a className={s.shoes}>sign our guest book!</a>
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className={`${s.logo_column} ${s.subtext}`}>
