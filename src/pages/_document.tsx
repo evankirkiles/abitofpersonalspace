@@ -11,10 +11,6 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=optional"
-            rel="stylesheet"
-          />
           <meta
             httpEquiv="Content-Type"
             content="text/html; charset=utf-8"

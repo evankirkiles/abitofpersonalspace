@@ -58,7 +58,7 @@ const SpaceCard: React.FC<SpaceCardProps> = function SpaceCard({ space }) {
         </div>
         <div className={s.door_handle}></div>
       </div>
-      <div className={s.created_at}>
+      <div className={s.created_at} suppressHydrationWarning>
         {new Date(space.created_at).toDateString()}
       </div>
       <CSSTransition

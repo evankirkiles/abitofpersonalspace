@@ -108,36 +108,6 @@ const HomePage: React.FC = function Home() {
               page.map((space) => <SpaceCard key={space.id} space={space} />)
             )
           : null}
-        {/* {spaces?.pages
-          ? spaces.pages.flatMap((page) =>
-              page.map((space) => <SpaceCard key={space.id} space={space} />)
-            )
-          : null}
-        {spaces?.pages
-          ? spaces.pages.flatMap((page) =>
-              page.map((space) => <SpaceCard key={space.id} space={space} />)
-            )
-          : null}
-        {spaces?.pages
-          ? spaces.pages.flatMap((page) =>
-              page.map((space) => <SpaceCard key={space.id} space={space} />)
-            )
-          : null}
-        {spaces?.pages
-          ? spaces.pages.flatMap((page) =>
-              page.map((space) => <SpaceCard key={space.id} space={space} />)
-            )
-          : null} */}
-        {/* <div className={s.door}>peter kirkiles</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div>
-        <div className={s.door}>HI</div> */}
       </div>
     </div>
   );
